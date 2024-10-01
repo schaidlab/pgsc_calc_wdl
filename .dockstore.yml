@@ -1,0 +1,6 @@
+version: 1.2
+workflows:
+   - name: pgsc_calc
+     subclass: WDL
+     primaryDescriptorPath: /pgsc_calc.wdl
+     
