@@ -21,8 +21,8 @@ workflow pgsc_calc {
 
 task pgsc_calc_nextflow {
     input {
-        mem_gb = 16
-        cpu = 2
+        Int mem_gb = 16
+        Int cpu = 2
     }
 
     command <<<
@@ -35,7 +35,7 @@ task pgsc_calc_nextflow {
 
     runtime {
         docker: "uwgac/pgsc_calc:0.1.0"
-        memory: "~{64}G"
+        memory: "~{mem_gb}G"
         cpu: "~{cpu}"
     }
 }
