@@ -37,8 +37,8 @@ task pgsc_calc_nextflow {
         set -e -o pipefail
 
         Rscript -e "\
-        files <- readLines(~{write_lines(vcf_file)}); \
-        chrs <- readLines(~{write_lines(chromosome)}); \
+        files <- readLines('~{write_lines(vcf_file)}'); \
+        chrs <- readLines('~{write_lines(chromosome)}'); \
         stopifnot(length(files) == length(chrs))
         sampleset <- tibble::tibble(sampleset = '~{sampleset}', path_prefix=files, chrom=chrs, format='vcf'); \
         readr::write_csv(sampleset, 'sampleset.csv'); \
