@@ -4,6 +4,7 @@ workflow pgsc_calc {
     input {
         Array[File] vcf_file
         Array[String] chromosome
+        Array[String] pgs_id
         String sampleset = "cohort"
     }
 
@@ -11,6 +12,7 @@ workflow pgsc_calc {
         input:
             vcf_file = vcf_file,
             chromosome = chromosome,
+            pgs_id = pgs_id,
             sampleset = sampleset
     }
 
@@ -28,6 +30,7 @@ task pgsc_calc_nextflow {
     input {
         Array[File] vcf_file
         Array[String] chromosome
+        Array[String] pgs_id
         String sampleset
         Int mem_gb = 16
         Int cpu = 2
@@ -41,14 +44,19 @@ task pgsc_calc_nextflow {
         chrs <- readLines('~{write_lines(chromosome)}'); \
         stopifnot(length(files) == length(chrs))
         sampleset <- tibble::tibble(sampleset = '~{sampleset}', path_prefix=files, chrom=chrs, format='vcf'); \
-        readr::write_csv(sampleset, 'sampleset.csv'); \
+        readr::write_csv(sampleset, 'samplesheet.csv'); \
         "
 
-        #nextflow run pgscatalog/pgsc_calc -r v2.0.0-alpha.5 -profile test,conda
+        nextflow run pgscatalog/pgsc_calc -r v2.0.0-alpha.5 -profile conda \
+            --input samplesheet.csv \
+            --pgs_id ~{sep="," pgs_id}
     >>>
 
     output {
-        File sampleset = "sampleset.csv"
+        File samplesheet = "samplesheet.csv"
+        Array[File] match_files = glob("results/~{sampleset}/match/*")
+        Array[File] score_files = glob("results/~{sampleset}/score/*")
+        Array[File] log_files = glob("results/pipeline_info/*")
     }
 
     runtime {
