@@ -46,7 +46,7 @@ task pgsc_calc_nextflow {
         files <- readLines('~{write_lines(vcf_file)}'); \
         chrs <- readLines('~{write_lines(chromosome)}'); \
         stopifnot(length(files) == length(chrs))
-        file_prefix <- sub('\\.[bv]cf.*z?$'', '', files); \
+        file_prefix <- sub('[[:punct:]][bv]cf.*z?$'', '', files); \
         sampleset <- tibble::tibble(sampleset = '~{sampleset}', path_prefix=file_prefix, chrom=chrs, format='vcf'); \
         readr::write_csv(sampleset, 'samplesheet.csv'); \
         "
