@@ -4,6 +4,7 @@ workflow pgsc_calc {
     input {
         Array[File] vcf_file
         Array[String] chromosome
+        String target_build = "GRCh38"
         Array[String] pgs_id
         String sampleset = "cohort"
     }
@@ -13,6 +14,7 @@ workflow pgsc_calc {
             vcf_file = vcf_file,
             chromosome = chromosome,
             pgs_id = pgs_id,
+            target_build = target_build,
             sampleset = sampleset
     }
 
@@ -30,6 +32,7 @@ task pgsc_calc_nextflow {
     input {
         Array[File] vcf_file
         Array[String] chromosome
+        String target_build
         Array[String] pgs_id
         String sampleset
         Int mem_gb = 16
@@ -49,6 +52,7 @@ task pgsc_calc_nextflow {
 
         nextflow run pgscatalog/pgsc_calc -r v2.0.0-alpha.5 -profile conda \
             --input samplesheet.csv \
+            --target_build ~{target_build} \
             --pgs_id ~{sep="," pgs_id}
     >>>
 
