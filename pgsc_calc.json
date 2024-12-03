@@ -1,5 +1,5 @@
 {
-    "pgsc_calc.vcf_file": [
+    "pgsc_calc.vcf": [
         "gs://terra-featured-workspaces/GWAS/1kg-genotypes/vcf/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.bgz",
         "gs://terra-featured-workspaces/GWAS/1kg-genotypes/vcf/ALL.chr2.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.bgz",
         "gs://terra-featured-workspaces/GWAS/1kg-genotypes/vcf/ALL.chr3.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.bgz",
