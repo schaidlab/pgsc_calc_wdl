@@ -81,7 +81,7 @@ task pgsc_calc_nextflow {
         String target_build
         Array[String] pgs_id
         String sampleset
-        Int mem_gb = 16
+        Int mem_gb = 32
         Int cpu = 2
     }
     
