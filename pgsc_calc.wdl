@@ -81,8 +81,8 @@ task pgsc_calc_nextflow {
         String target_build
         Array[String] pgs_id
         String sampleset
-        Int mem_gb = 32
-        Int cpu = 2
+        Int mem_gb = 64
+        Int cpu = 8
     }
     
 	Int disk_size = ceil(1.5*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB"))) + 10
