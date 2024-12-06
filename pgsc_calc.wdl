@@ -6,6 +6,8 @@ workflow pgsc_calc {
         Array[String] chromosome
         String target_build = "GRCh38"
         Array[String] pgs_id
+        Boolean run_ancestry
+        File ref_panel = ""
         String sampleset_name = "cohort"
         Array[String]? arguments
     }
@@ -25,6 +27,8 @@ workflow pgsc_calc {
             chromosome = chromosome,
             pgs_id = pgs_id,
             target_build = target_build,
+            run_ancestry = run_ancestry,
+            ref_panel = ref_panel,
             sampleset = sampleset_name,
             arguments = arguments
     }
@@ -49,10 +53,10 @@ task prepare_genomes {
         Int cpu = 2
     }
 
-	Int disk_size = ceil(2.5*(size(vcf, "GB"))) + 5
-	String filename = basename(vcf)
-	String basename = sub(filename, "[[:punct:]][bv]cf.*z?$", "")
-	String prefix = if (sub(filename, ".bcf", "") != filename) then "--bcf" else "--vcf"
+        Int disk_size = ceil(2.5*(size(vcf, "GB"))) + 5
+        String filename = basename(vcf)
+        String basename = sub(filename, "[[:punct:]][bv]cf.*z?$", "")
+        String prefix = if (sub(filename, ".bcf", "") != filename) then "--bcf" else "--vcf"
 
     command <<<
         plink2 ~{prefix} ~{vcf}  \
@@ -69,8 +73,8 @@ task prepare_genomes {
 
     runtime {
         docker: "uwgac/pgsc_calc:0.1.0"
-		disks: "local-disk ~{disk_size} SSD"
-		memory: "~{mem_gb}G"
+        disks: "local-disk ~{disk_size} SSD"
+        memory: "~{mem_gb}G"
         cpu: "~{cpu}"
     }
 }
@@ -84,13 +88,16 @@ task pgsc_calc_nextflow {
         Array[String] chromosome
         String target_build
         Array[String] pgs_id
+        Boolean run_ancestry
+        File ref_panel
         String sampleset
         Array[String]? arguments
         Int mem_gb = 64
         Int cpu = 16
     }
-    
-	Int disk_size = ceil(1.5*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB"))) + 10
+
+        Int disk_size = ceil(1.5*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB"))) + 25
+    String ancestry_arg = if (defined(run_ancestry)) then "--run_ancestry " + ref_panel else ""
 
     command <<<
         set -e -o pipefail
@@ -108,6 +115,7 @@ task pgsc_calc_nextflow {
             --input samplesheet.csv \
             --target_build ~{target_build} \
             --pgs_id ~{sep="," pgs_id} \
+            ~{ancestry_arg} \
             ~{sep=" " arguments}
     >>>
 
@@ -120,7 +128,7 @@ task pgsc_calc_nextflow {
 
     runtime {
         docker: "uwgac/pgsc_calc:0.1.0"
-		disks: "local-disk ~{disk_size} SSD"
+        disks: "local-disk ~{disk_size} SSD"
         memory: "~{mem_gb}G"
         cpu: "~{cpu}"
     }
