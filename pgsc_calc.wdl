@@ -6,7 +6,8 @@ workflow pgsc_calc {
         Array[String] chromosome
         String target_build = "GRCh38"
         Array[String] pgs_id
-        String sampleset = "cohort"
+        String sampleset_name = "cohort"
+        Array[String]? arguments
     }
 
     scatter (file in vcf) {
@@ -24,7 +25,8 @@ workflow pgsc_calc {
             chromosome = chromosome,
             pgs_id = pgs_id,
             target_build = target_build,
-            sampleset = sampleset
+            sampleset = sampleset_name,
+            arguments = arguments
     }
 
     output {
@@ -83,6 +85,7 @@ task pgsc_calc_nextflow {
         String target_build
         Array[String] pgs_id
         String sampleset
+        Array[String]? arguments
         Int mem_gb = 64
         Int cpu = 16
     }
@@ -104,7 +107,8 @@ task pgsc_calc_nextflow {
         nextflow run pgscatalog/pgsc_calc -r v2.0.0-alpha.5 -profile conda \
             --input samplesheet.csv \
             --target_build ~{target_build} \
-            --pgs_id ~{sep="," pgs_id}
+            --pgs_id ~{sep="," pgs_id} \
+            ~{sep=" " arguments}
     >>>
 
     output {
