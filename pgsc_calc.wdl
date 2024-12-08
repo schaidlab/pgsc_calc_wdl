@@ -92,11 +92,11 @@ task pgsc_calc_nextflow {
         File ref_panel
         String sampleset
         Array[String]? arguments
+        Int disk_gb = 128
         Int mem_gb = 64
         Int cpu = 16
     }
 
-        Int disk_size = ceil(1.5*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB") + size(ref_panel, "GB"))) + 20
         String ancestry_arg = if (run_ancestry) then "--run_ancestry " + ref_panel else ""
 
     command <<<
@@ -128,7 +128,7 @@ task pgsc_calc_nextflow {
 
     runtime {
         docker: "uwgac/pgsc_calc:0.1.0"
-        disks: "local-disk ~{disk_size} SSD"
+        disks: "local-disk ~{disk_gb} SSD"
         memory: "~{mem_gb}G"
         cpu: "~{cpu}"
     }
