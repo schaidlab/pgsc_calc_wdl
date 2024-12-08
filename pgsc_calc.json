@@ -25,5 +25,7 @@
     ],
     "pgsc_calc.chromosome": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"],
     "pgsc_calc.target_build": "GRCh37",
-    "pgsc_calc.pgs_id": ["PGS001229", "PGS000802"]
+    "pgsc_calc.pgs_id": ["PGS001229", "PGS000802"],
+    "pgsc_calc.run_ancestry": true,
+    "pgsc_calc.ref_panel": "gs://fc-a8511200-791a-4375-bccf-fbe41ac3f9f6/pgsc_HGDP+1kGP_v1.tar.zst"
 }
