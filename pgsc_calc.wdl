@@ -96,7 +96,7 @@ task pgsc_calc_nextflow {
         Int cpu = 16
     }
 
-        Int disk_size = ceil(1.5*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB"))) + 25
+        Int disk_size = ceil(1.5*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB") + size(ref_panel, "GB"))) + 20
         String ancestry_arg = if (run_ancestry) then "--run_ancestry " + ref_panel else ""
 
     command <<<
