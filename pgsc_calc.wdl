@@ -2,7 +2,10 @@ version 1.0
 
 workflow pgsc_calc {
     input {
-        Array[File] vcf
+        # Array[File] vcf
+        Array[File] pgen
+        Array[File] pvar
+        Array[File] psam
         Array[String] chromosome
         String target_build = "GRCh38"
         Array[String] pgs_id
@@ -12,18 +15,21 @@ workflow pgsc_calc {
         Array[String]? arguments
     }
 
-    scatter (file in vcf) {
-        call prepare_genomes {
-            input:
-                vcf = file
-        }
-    }
+    # scatter (file in vcf) {
+    #     call prepare_genomes {
+    #         input:
+    #             vcf = file
+    #     }
+    # }
 
     call pgsc_calc_nextflow {
         input:
-            pgen = prepare_genomes.pgen,
-            pvar = prepare_genomes.pvar,
-            psam = prepare_genomes.psam,
+            # pgen = prepare_genomes.pgen,
+            # pvar = prepare_genomes.pvar,
+            # psam = prepare_genomes.psam,
+            pgen = pgen,
+            pvar = pvar,
+            psam = psam,
             chromosome = chromosome,
             pgs_id = pgs_id,
             target_build = target_build,
