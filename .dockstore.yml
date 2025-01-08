@@ -3,6 +3,6 @@ workflows:
    - name: pgsc_calc
      subclass: WDL
      primaryDescriptorPath: /pgsc_calc.wdl
-    testParameterFiles:
+     testParameterFiles:
        - /pgsc_calc.json
      
