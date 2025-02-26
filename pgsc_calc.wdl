@@ -1,11 +1,13 @@
 version 1.0
 
+import "pgsc_calc_prepare_genomes.wdl" as prep
+
 workflow pgsc_calc {
     input {
-        # Array[File] vcf
-        Array[File] pgen
-        Array[File] pvar
-        Array[File] psam
+        Array[File]? vcf
+        Array[File]? pgen
+        Array[File]? pvar
+        Array[File]? psam
         Array[String] chromosome
         String target_build = "GRCh38"
         Array[String] pgs_id
@@ -15,21 +17,20 @@ workflow pgsc_calc {
         Array[String]? arguments
     }
 
-    # scatter (file in vcf) {
-    #     call prepare_genomes {
-    #         input:
-    #             vcf = file
-    #     }
-    # }
+    if (defined(vcf)) {
+        scatter (file in select_first([vcf, ""])) {
+            call prep.prepare_genomes {
+                input:
+                    vcf = file
+            }
+        }
+    }
 
     call pgsc_calc_nextflow {
         input:
-            # pgen = prepare_genomes.pgen,
-            # pvar = prepare_genomes.pvar,
-            # psam = prepare_genomes.psam,
-            pgen = pgen,
-            pvar = pvar,
-            psam = psam,
+            pgen = select_first([prepare_genomes.pgen, pgen]),
+            pvar = select_first([prepare_genomes.pvar, pvar]),
+            psam = select_first([prepare_genomes.psam, psam]),
             chromosome = chromosome,
             pgs_id = pgs_id,
             target_build = target_build,
@@ -52,40 +53,6 @@ workflow pgsc_calc {
 }
 
 
-task prepare_genomes {
-    input {
-        File vcf
-        Int mem_gb = 16
-        Int cpu = 2
-    }
-
-        Int disk_size = ceil(2.5*(size(vcf, "GB"))) + 5
-        String filename = basename(vcf)
-        String basename = sub(filename, "[[:punct:]][bv]cf.*z?$", "")
-        String prefix = if (sub(filename, ".bcf", "") != filename) then "--bcf" else "--vcf"
-
-    command <<<
-        plink2 ~{prefix} ~{vcf}  \
-            --allow-extra-chr \
-            --chr 1-22, X, Y, XY \
-            --make-pgen --out ~{basename}
-    >>>
-
-    output {
-        File pgen = "~{basename}.pgen"
-        File pvar = "~{basename}.pvar"
-        File psam = "~{basename}.psam"
-    }
-
-    runtime {
-        docker: "uwgac/pgsc_calc:0.1.0"
-        disks: "local-disk ~{disk_size} SSD"
-        memory: "~{mem_gb}G"
-        cpu: "~{cpu}"
-    }
-}
-
-
 task pgsc_calc_nextflow {
     input {
         Array[File] pgen
@@ -103,7 +70,7 @@ task pgsc_calc_nextflow {
         Int cpu = 16
     }
 
-        String ancestry_arg = if (run_ancestry) then "--run_ancestry " + ref_panel else ""
+    String ancestry_arg = if (run_ancestry) then "--run_ancestry " + ref_panel else ""
 
     command <<<
         set -e -o pipefail

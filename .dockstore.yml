@@ -5,4 +5,7 @@ workflows:
      primaryDescriptorPath: /pgsc_calc.wdl
      testParameterFiles:
        - /pgsc_calc.json
+   - name: pgsc_calc_prepare_genomes
+     subclass: WDL
+     primaryDescriptorPath: /pgsc_calc_prepare_genomes.wdl
      
