@@ -7,8 +7,11 @@ The next step [runs the pgsc_calc nextflow workflow](https://pgsc-calc.readthedo
 
 input | description
 --- | ---
-vcf | Array of VCF files
-chromosome | Array of chromosome strings (1-22, X, Y) corresponding to `vcf`. If there is one VCF file with multiple chromosomes, this input should be an empty string (`[""]`)
+vcf | Array of VCF files. If provided, will be converted to pgen/pvar/psam. If not provided, use pgen/pvar/psam inpute instead
+pgen | Array of pgen files
+pvar | Array of pvar files
+psam | Array of psam files
+chromosome | Array of chromosome strings (1-22, X, Y) corresponding to `vcf` or `pgen/pvar/psam`. If there is one file with multiple chromosomes, this input should be an empty string (`[""]`)
 target_build | `"GRCh38"` (default) or `"GRCh37"`
 pgs_id | PGS catalog IDs to calculate (e.g. `["PGS001229", "PGS000802"]`)
 run_ancestry | `true` to [perform ancestry adjustment](https://pgsc-calc.readthedocs.io/en/latest/explanation/geneticancestry.html) using a reference panel, `false` to skip this step
