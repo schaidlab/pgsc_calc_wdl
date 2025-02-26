@@ -5,6 +5,7 @@
     "pgsc_calc.chromosome": [""],
     "pgsc_calc.target_build": "GRCh37",
     "pgsc_calc.pgs_id": ["PGS001229", "PGS000802"],
+    //"pgsc_calc.scorefile": ["gs://fc-a8511200-791a-4375-bccf-fbe41ac3f9f6/score_files/pgscat_weight_00_allchr_additive_0.scorefile.gz"],
     "pgsc_calc.run_ancestry": true,
     "pgsc_calc.ref_panel": "gs://fc-a8511200-791a-4375-bccf-fbe41ac3f9f6/pgsc_HGDP+1kGP_v1.tar.zst"
 }

@@ -10,7 +10,8 @@ workflow pgsc_calc {
         Array[File]? psam
         Array[String] chromosome
         String target_build = "GRCh38"
-        Array[String] pgs_id
+        Array[String]? pgs_id
+        Array[File]? scorefile
         Boolean run_ancestry
         File ref_panel = ""
         String sampleset_name = "cohort"
@@ -33,6 +34,7 @@ workflow pgsc_calc {
             psam = select_first([prepare_genomes.psam, psam]),
             chromosome = chromosome,
             pgs_id = pgs_id,
+            scorefile = scorefile,
             target_build = target_build,
             run_ancestry = run_ancestry,
             ref_panel = ref_panel,
@@ -60,7 +62,8 @@ task pgsc_calc_nextflow {
         Array[File] psam
         Array[String] chromosome
         String target_build
-        Array[String] pgs_id
+        Array[String]? pgs_id
+        Array[File]? scorefile
         Boolean run_ancestry
         File ref_panel
         String sampleset
@@ -71,6 +74,7 @@ task pgsc_calc_nextflow {
     }
 
     String ancestry_arg = if (run_ancestry) then "--run_ancestry " + ref_panel else ""
+    String pgs_arg = if (defined(pgs_id)) then "--pgs_id ~{sep=',' pgs_id}" else ""
 
     command <<<
         set -e -o pipefail
@@ -87,7 +91,8 @@ task pgsc_calc_nextflow {
         nextflow run pgscatalog/pgsc_calc -r v2.0.0-alpha.5 -profile conda \
             --input samplesheet.csv \
             --target_build ~{target_build} \
-            --pgs_id ~{sep="," pgs_id} \
+            ~{pgs_arg} \
+            ~{"--scorefile " + scorefile} \
             ~{ancestry_arg} \
             ~{sep=" " arguments}
     >>>
