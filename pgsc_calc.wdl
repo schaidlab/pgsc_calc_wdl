@@ -12,8 +12,7 @@ workflow pgsc_calc {
         String target_build = "GRCh38"
         Array[String]? pgs_id
         Array[File] scorefile = [""]
-        Boolean run_ancestry
-        File ref_panel = ""
+        File? ancestry_ref_panel
         String sampleset_name = "cohort"
         Array[String]? arguments
     }
@@ -37,8 +36,7 @@ workflow pgsc_calc {
                 pgs_id = pgs_id,
                 scorefile = sf,
                 target_build = target_build,
-                run_ancestry = run_ancestry,
-                ref_panel = ref_panel,
+                ancestry_ref_panel = ancestry_ref_panel,
                 sampleset = sampleset_name,
                 arguments = arguments
         }
@@ -66,8 +64,7 @@ task pgsc_calc_nextflow {
         String target_build
         Array[String]? pgs_id
         File? scorefile
-        Boolean run_ancestry
-        File ref_panel
+        File? ancestry_ref_panel
         String sampleset
         Array[String]? arguments
         Int disk_gb = 128
@@ -75,9 +72,7 @@ task pgsc_calc_nextflow {
         Int cpu = 16
     }
 
-    String ancestry_arg = if (run_ancestry) then "--run_ancestry " + ref_panel else ""
-    String pgs_arg = if (defined(pgs_id)) then "--pgs_id ~{sep=',' pgs_id}" else ""
-    String score_arg = if (defined(scorefile) && scorefile != "") then "--scorefile " + scorefile else ""
+    String pgs_arg = if (defined(pgs_id)) then "--pgs_id ~{sep=',' pgs_id}" else "--scorefile " + scorefile
 
     command <<<
         set -e -o pipefail
@@ -94,8 +89,8 @@ task pgsc_calc_nextflow {
         nextflow run pgscatalog/pgsc_calc -r v2.0.0-alpha.5 -profile conda \
             --input samplesheet.csv \
             --target_build ~{target_build} \
-            ~{pgs_arg} ~{score_arg} \
-            ~{ancestry_arg} \
+            ~{pgs_arg} \
+            ~{"--run_ancestry " + ancestry_ref_panel} \
             ~{sep=" " arguments}
     >>>
 
