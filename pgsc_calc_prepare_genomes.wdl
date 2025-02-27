@@ -51,8 +51,8 @@ task prepare_genomes {
     }
 
     runtime {
-        #docker: "uwgac/pgsc_calc:0.1.0"
-        docker: "us-docker.pkg.dev/primed-cc/pgsc-calc/pgsc_calc:0.1.0"
+        docker: "uwgac/pgsc_calc:0.1.0"
+        #docker: "us-docker.pkg.dev/primed-cc/pgsc-calc/pgsc_calc:0.1.0"
         disks: "local-disk ~{disk_size} SSD"
         memory: "~{mem_gb}G"
         cpu: "~{cpu}"
