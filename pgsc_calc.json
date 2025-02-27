@@ -4,7 +4,7 @@
     "pgsc_calc.psam": ["gs://fc-0c05ad53-4513-482a-8f92-c3d0004f72bc/high_coverage_3202_samples/all_hg38_ns.psam"],
     "pgsc_calc.chromosome": [""],
     "pgsc_calc.target_build": "GRCh37",
-    "pgsc_calc.pgs_id": ["PGS001229", "PGS000802"],
+    "pgsc_calc.scorefile": ["gs://fc-a2528b47-e29c-41cf-93e2-e08765f8a200/scorefile_customgrch37.txt"],
     "pgsc_calc.run_ancestry": true,
     "pgsc_calc.ref_panel": "gs://fc-a8511200-791a-4375-bccf-fbe41ac3f9f6/pgsc_HGDP+1kGP_v1.tar.zst"
 }
