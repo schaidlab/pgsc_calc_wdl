@@ -8,4 +8,7 @@ workflows:
    - name: pgsc_calc_prepare_genomes
      subclass: WDL
      primaryDescriptorPath: /pgsc_calc_prepare_genomes.wdl
+   - name: calc_scores
+     subclass: WDL
+     primaryDescriptorPath: /calc_scores.wdl
      
