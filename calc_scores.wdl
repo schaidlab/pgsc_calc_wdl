@@ -114,6 +114,12 @@ task n_cols {
     output {
         Int ncols = read_int('ncols.txt')
     }
+
+    runtime {
+        docker: "rocker/tidyverse:4"
+        disks: "local-disk 10 SSD"
+        memory: "16G"
+    }
 }
 
 
@@ -139,7 +145,7 @@ task plink_score {
     }
 
     runtime {
-        docker: "uwgac/pgsc_calc:0.1.0"
+        docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
         disks: "local-disk 10 SSD"
         memory: "16G"
         cpu: 2
