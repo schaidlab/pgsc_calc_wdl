@@ -33,7 +33,7 @@ workflow calc_scores {
     }
 
     output {
-        File scores = plink_score.scores
+        #File scores = plink_score.scores
     }
 }
 
@@ -107,19 +107,23 @@ task plink_score {
 
     command <<<
         set -e -o pipefail
-        ncols=$(zcat ~{scorefile} | head -n1 | awk "{print NF}")
-        echo $ncols
+        echo "hello world"
+        echo "~{prefix}"
+        ls /cromwell_root
+        which plink2
+        #ncols=$(zcat ~{scorefile} | head -n1 | awk "{print NF}")
+        #echo $ncols
 
-        echo ~{scorefile}
-        plink2 --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
-            no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-${ncols} \
-            --out ~{prefix}
-        ls
+        #echo ~{scorefile}
+        #plink2 --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
+        #    no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-${ncols} \
+        #    --out ~{prefix}
+        #ls
     >>>
 
     output {
-        File scores = "~{prefix}.sscore"
-        File variants = "~{prefix}.sscore.vars"
+        #File scores = "~{prefix}.sscore"
+        #File variants = "~{prefix}.sscore.vars"
     }
 
     runtime {
