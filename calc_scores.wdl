@@ -24,16 +24,23 @@ workflow calc_scores {
         }
     }
 
+    call n_cols {
+        input:
+            file = select_first([harmonize_score_file.scorefile_harmonized, scorefile])
+    }
+
     call plink_score {
         input:
             scorefile = select_first([harmonize_score_file.scorefile_harmonized, scorefile]),
+            scorefile_ncols = n_cols.ncols,
             pgen = pgen,
             pvar = select_first([remove_chr_prefix.pvar_nochr, pvar]),
             psam = psam
     }
 
     output {
-        #File scores = plink_score.scores
+        File scores = plink_score.scores
+        File variants = plink_score.variants
     }
 }
 
@@ -95,9 +102,25 @@ task remove_chr_prefix {
 }
 
 
+task n_cols {
+    input {
+        File file
+    }
+
+    command <<<
+        Rscript -e "dat <- readr::read_tsv('~{file}', n_max=10); writeLines(as.character(ncol(dat)), 'ncols.txt')"
+    >>>
+
+    output {
+        Int ncols = read_int('ncols.txt')
+    }
+}
+
+
 task plink_score {
     input {
         File scorefile
+        Int scorefile_ncols
         File pgen
         File pvar
         File psam
@@ -105,10 +128,8 @@ task plink_score {
     }
 
     command <<<
-        set -e -o pipefail
-        Rscript -e "dat <- readr::read_tsv('~scorefile', n_max=10); writeLines(as.character(ncol(dat)), 'ncols.txt')"
         plink2 --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
-            no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-~{read_int('ncols.txt')} \
+            no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-~{scorefile_ncols} \
             --out ~{prefix}
     >>>
 
