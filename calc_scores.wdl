@@ -108,10 +108,13 @@ task plink_score {
     command <<<
         set -e -o pipefail
         ncols=$(zcat ~{scorefile} | head -n1 | awk "{print NF}")
+        echo $ncols
 
+        echo ~{scorefile}
         plink2 --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
             no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-${ncols} \
             --out ~{prefix}
+        ls
     >>>
 
     output {
