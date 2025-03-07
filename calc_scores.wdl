@@ -65,7 +65,7 @@ task harmonize_score_file {
     }
 
     runtime {
-        docker: "uwgac/pgsc_calc:0.1.0"
+        docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
         disks: "local-disk 10 SSD"
         memory: "16G"
     }
@@ -77,16 +77,18 @@ task remove_chr_prefix {
         File pvar
     }
 
+    String outfile = '~{basename(pvar, ".pvar")}_nochr.pvar'
+
     command <<<
-        sed 's/chr//' ~{pvar} > ~{basename(pvar, ".pvar")}_nochr.pvar
+        sed 's/chr//' ~{pvar} > ~{outfile}
     >>>
 
     output {
-        File pvar_nochr = '~{basename(pvar, ".pvar")}_nochr.pvar'
+        File pvar_nochr = '~{outfile}'
     }
 
     runtime {
-        docker: "uwgac/pgsc_calc:0.1.0"
+        docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
         disks: "local-disk 10 SSD"
         memory: "16G"
     }
@@ -101,21 +103,24 @@ task plink_score {
         File psam
     }
 
+    String prefix = '~{basename(pgen, ".pgen")}'
+
     command <<<
         set -e -o pipefail
         ncols=$(zcat ~{scorefile} | head -n1 | awk "{print NF}")
 
         plink2 --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
-            no-mean-imputation header-read cols=+scoresums --score-col-nums 3-${ncols} \
-            --out ~{basename(pgen, ".pgen")}
+            no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-${ncols} \
+            --out ~{prefix}
     >>>
 
     output {
-        File scores = '~{basename(pgen, ".pgen")}.sscore'
+        File scores = "~{prefix}.sscore"
+        File variants = "~{prefix}.sscore.vars"
     }
 
     runtime {
-        docker: "uwgac/pgsc_calc:0.1.0"
+        docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
         disks: "local-disk 10 SSD"
         memory: "16G"
         cpu: 2
