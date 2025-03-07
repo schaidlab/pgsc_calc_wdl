@@ -101,6 +101,7 @@ task plink_score {
         File pgen
         File pvar
         File psam
+        Int ncols
     }
 
     String prefix = '~{basename(pgen, ".pgen")}'
@@ -109,12 +110,12 @@ task plink_score {
         set -e -o pipefail
         echo "hello world"
         echo "~{prefix}"
-        ls /cromwell_root/*
+        #ls /cromwell_root/*
         which plink2
-        ncols=$(zcat ~{scorefile} | head -n1 | awk "{print NF}")
-        echo $ncols
+        #ncols=$(zcat ~{scorefile} | head -n1 | awk "{print NF}")
+        #echo $ncols
         plink2 --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
-            no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-${ncols} \
+            no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-~{ncols} \
             --out ~{prefix}
         ls
     >>>
