@@ -101,32 +101,24 @@ task plink_score {
         File pgen
         File pvar
         File psam
-        Int ncols
+        String prefix = "out"
     }
-
-    String prefix = '~{basename(pgen, ".pgen")}'
 
     command <<<
         set -e -o pipefail
-        echo "hello world"
-        echo "~{prefix}"
-        #ls /cromwell_root/*
-        which plink2
-        #ncols=$(zcat ~{scorefile} | head -n1 | awk "{print NF}")
-        #echo $ncols
+        Rscript -e "dat <- readr::read_tsv('~scorefile', n_max=10); writeLines(as.character(ncol(dat)), 'ncols.txt')"
         plink2 --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
-            no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-~{ncols} \
+            no-mean-imputation header-read list-variants cols=+scoresums --score-col-nums 3-~{read_int('ncols.txt')} \
             --out ~{prefix}
-        ls
     >>>
 
     output {
-        #File scores = "~{prefix}.sscore"
-        #File variants = "~{prefix}.sscore.vars"
+        File scores = "~{prefix}.sscore"
+        File variants = "~{prefix}.sscore.vars"
     }
 
     runtime {
-        docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
+        docker: "uwgac/pgsc_calc:0.1.0"
         disks: "local-disk 10 SSD"
         memory: "16G"
         cpu: 2
