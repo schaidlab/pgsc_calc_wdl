@@ -64,11 +64,11 @@ task harmonize_score_file {
             }
             $2=a[4]
             print $0
-        }' OFS="\t" > ~{scorefile}_harmonized
+        }' OFS="\t" > ~{basename(scorefile)}_harmonized
     >>>
 
     output {
-        File scorefile_harmonized = "~{scorefile}_harmonized"
+        File scorefile_harmonized = "~{basename(scorefile)}_harmonized"
     }
 
     runtime {
