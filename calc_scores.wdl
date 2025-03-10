@@ -52,7 +52,7 @@ task harmonize_score_file {
 
     command <<<
         set -e -o pipefail
-        zcat ~{scorefile} | awk '{$1="chr"$1; print $0}' OFS="\t" | \
+        zcat ~{scorefile} | \
         awk '{
             if (FNR==1) { print $0; next}
             split($1, a, ":")
