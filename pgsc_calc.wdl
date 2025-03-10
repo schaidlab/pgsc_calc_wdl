@@ -10,7 +10,8 @@ workflow pgsc_calc {
         Array[File]? psam
         Array[String] chromosome
         String target_build = "GRCh38"
-        Array[File] scorefile
+        File? pgs_id
+        File? scorefile
         File? ancestry_ref_panel
         String sampleset_name = "cohort"
         Array[String]? arguments
@@ -25,25 +26,24 @@ workflow pgsc_calc {
         }
     }
 
-    scatter (sf in scorefile) {
-        call pgsc_calc_nextflow {
-            input:
-                pgen = select_first([prepare_genomes.pgen, pgen]),
-                pvar = select_first([prepare_genomes.pvar, pvar]),
-                psam = select_first([prepare_genomes.psam, psam]),
-                chromosome = chromosome,
-                scorefile = sf,
-                target_build = target_build,
-                ancestry_ref_panel = ancestry_ref_panel,
-                sampleset = sampleset_name,
-                arguments = arguments
-        }
+    call pgsc_calc_nextflow {
+        input:
+            pgen = select_first([prepare_genomes.pgen, pgen]),
+            pvar = select_first([prepare_genomes.pvar, pvar]),
+            psam = select_first([prepare_genomes.psam, psam]),
+            chromosome = chromosome,
+            scorefile = scorefile,
+            pgs_id = pgs_id,
+            target_build = target_build,
+            ancestry_ref_panel = ancestry_ref_panel,
+            sampleset = sampleset_name,
+            arguments = arguments
     }
 
     output {
-        Array[File] match_files = flatten(pgsc_calc_nextflow.match_files)
-        Array[File] score_files = flatten(pgsc_calc_nextflow.score_files)
-        Array[File] log_files = flatten(pgsc_calc_nextflow.log_files)
+        Array[File] match_files = pgsc_calc_nextflow.match_files
+        Array[File] score_files = pgsc_calc_nextflow.score_files
+        Array[File] log_files = pgsc_calc_nextflow.log_files
     }
 
      meta {
@@ -60,6 +60,7 @@ task pgsc_calc_nextflow {
         Array[File] psam
         Array[String] chromosome
         String target_build
+        String? pgs_id
         File? scorefile
         File? ancestry_ref_panel
         String sampleset
@@ -85,6 +86,7 @@ task pgsc_calc_nextflow {
         nextflow run pgscatalog/pgsc_calc -r v2.0.0-alpha.5 -profile conda \
             --input samplesheet.csv \
             --target_build ~{target_build} \
+            ~{"--pgs_id " + pgs_id} \
             ~{"--scorefile " + scorefile} \
             ~{"--run_ancestry " + ancestry_ref_panel} \
             ~{sep=" " arguments}
