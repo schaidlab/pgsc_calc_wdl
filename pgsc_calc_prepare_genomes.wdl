@@ -23,9 +23,9 @@ workflow pgsc_calc_prepare_genomes {
     }
 
     output {
-        Array[File] pgen = select_first([merge_files.out_pgen, prepare_genomes.pgen])
-        Array[File] pvar = select_first([merge_files.out_pvar, prepare_genomes.pvar])
-        Array[File] psam = select_first([merge_files.out_psam, prepare_genomes.psam])
+        Array[File] pgen = select_first([[merge_files.out_pgen], prepare_genomes.pgen])
+        Array[File] pvar = select_first([[merge_files.out_pvar], prepare_genomes.pvar])
+        Array[File] psam = select_first([[merge_files.out_psam], prepare_genomes.psam])
     }
 
      meta {
