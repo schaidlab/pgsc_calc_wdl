@@ -3,6 +3,7 @@ version 1.0
 workflow pgsc_calc_prepare_genomes {
     input {
         Array[File] vcf
+        Boolean merge_chroms = true
     }
 
     scatter (file in vcf) {
@@ -12,10 +13,19 @@ workflow pgsc_calc_prepare_genomes {
         }
     }
 
+    if (merge_chroms) {
+        call merge_files {
+            input:
+                pgen = prepare_genomes.pgen,
+                pvar = prepare_genomes.pvar,
+                psam = prepare_genomes.psam
+        }
+    }
+
     output {
-        Array[File] pgen = prepare_genomes.pgen
-        Array[File] pvar = prepare_genomes.pvar
-        Array[File] psam = prepare_genomes.psam
+        Array[File] pgen = select_first([merge_files.out_pgen, prepare_genomes.pgen])
+        Array[File] pvar = select_first([merge_files.out_pvar, prepare_genomes.pvar])
+        Array[File] psam = select_first([merge_files.out_psam, prepare_genomes.psam])
     }
 
      meta {
@@ -56,5 +66,37 @@ task prepare_genomes {
         disks: "local-disk ~{disk_size} SSD"
         memory: "~{mem_gb}G"
         cpu: "~{cpu}"
+    }
+}
+
+
+task merge_files {
+    input {
+        Array[File] pgen
+        Array[File] pvar
+        Array[File] psam
+        Int mem_gb = 16
+    }
+
+    Int disk_size = ceil(3*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB"))) + 10
+
+    command <<<
+        set -e -o pipefail
+        cat ~{write_lines(pgen)} | sed 's/.pgen//' > pfile.txt
+        plink2 --pmerge-list pfile.txt pfile \
+            --merge-max-allele-ct 2 \
+            --make-pgen --merged merged
+    >>>
+
+    output {
+        File out_pgen = "merged.pgen"
+        File out_pvar = "merged.pvar"
+        File out_psam = "merged.psam"
+    }
+
+    runtime {
+        docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
+        disks: "local-disk " + disk_size + " SSD"
+        memory: mem_gb + " GB"
     }
 }
