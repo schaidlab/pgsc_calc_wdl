@@ -51,6 +51,7 @@ task prepare_genomes {
         plink2 ~{prefix} ~{vcf}  \
             --allow-extra-chr \
             --chr 1-22, X, Y, XY \
+            --set-all-var-ids @:#:\$r:\$a \
             --make-pgen --out ~{basename}
     >>>
 
