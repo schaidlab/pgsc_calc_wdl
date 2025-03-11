@@ -6,8 +6,8 @@ workflow calc_scores {
         File pgen
         File pvar
         File psam
-        Boolean harmonize_scorefile = false
-        Boolean remove_pvar_chr_prefix = false
+        Boolean harmonize_scorefile = true
+        Boolean add_chr_prefix = true
     }
 
     if (harmonize_scorefile) {
@@ -17,24 +17,26 @@ workflow calc_scores {
         }
     }
 
-    if (remove_pvar_chr_prefix) {
-        call remove_chr_prefix {
+    if (add_chr_prefix) {
+        call chr_prefix {
             input:
-                pvar = pvar
+                file = select_first([harmonize_score_file.scorefile_harmonized, scorefile])
         }
     }
 
+    File scorefile_final = select_first([chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile])
+
     call n_cols {
         input:
-            file = select_first([harmonize_score_file.scorefile_harmonized, scorefile])
+            file = scorefile_final
     }
 
     call plink_score {
         input:
-            scorefile = select_first([harmonize_score_file.scorefile_harmonized, scorefile]),
+            scorefile = scorefile_final,
             scorefile_ncols = n_cols.ncols,
             pgen = pgen,
-            pvar = select_first([remove_chr_prefix.pvar_nochr, pvar]),
+            pvar = pvar,
             psam = psam
     }
 
@@ -50,6 +52,8 @@ task harmonize_score_file {
         File scorefile
     }
 
+    String filename = basename(scorefile, ".gz")
+
     command <<<
         set -e -o pipefail
         zcat ~{scorefile} | \
@@ -64,11 +68,12 @@ task harmonize_score_file {
             }
             $2=a[4]
             print $0
-        }' OFS="\t" > ~{basename(scorefile)}_harmonized
+        }' OFS="\t" > ~{filename}_harmonized
+        gzip ~{filename}_harmonized
     >>>
 
     output {
-        File scorefile_harmonized = "~{basename(scorefile)}_harmonized"
+        File scorefile_harmonized = "~{filename}_harmonized.gz"
     }
 
     runtime {
@@ -79,19 +84,21 @@ task harmonize_score_file {
 }
 
 
-task remove_chr_prefix {
+task chr_prefix {
     input {
-        File pvar
+        File file
     }
 
-    String outfile = '~{basename(pvar, ".pvar")}_nochr.pvar'
+    String filename = basename(file, ".gz")
 
     command <<<
-        sed 's/chr//' ~{pvar} > ~{outfile}
+        set -e -o pipefail
+        zcat ~{file} | awk '{$1="chr"$1; print $0}' OFS="\t" > ~{filename}_chrprefix
+        gzip ~{filename}_chrprefix
     >>>
 
     output {
-        File pvar_nochr = '~{outfile}'
+        File outfile = "~{filename}_chrprefix.gz"
     }
 
     runtime {
