@@ -1,4 +1,7 @@
 # pgsc_calc_wdl
+
+## pgsc_calc
+
 WDL wrapper for the [pgsc_calc](https://pgsc-calc.readthedocs.io/en/latest/) workflow
 
 The first step of the workflow [formats the input genomes](https://pgsc-calc.readthedocs.io/en/latest/how-to/prepare.html) in PLINK2 format.
@@ -20,3 +23,33 @@ sampleset_name | Name of the sampleset; used to construct output file names (def
 arguments | [Additional arguments](https://pgsc-calc.readthedocs.io/en/latest/reference/params.html#param-ref) to pass to psgc_calc
 
 Output files from pgsc_calc are described [here](https://pgsc-calc.readthedocs.io/en/latest/explanation/output.html#interpret).
+
+
+## pgsc_calc_prepare_genomes
+
+Standalone workflow to convert VCF to pgen/pvar/psam.
+
+input | description
+--- | ---
+vcf | Array of VCF files
+merge_chroms | Boolean for whether to merge files to a single set of output files with all chromosomes
+
+output description
+--- | ---
+pgen | Array of pgen files
+pvar | Array of pvar files
+psam | Array of psam files
+
+
+## calc_scores
+
+Calculate scores without using Nextflow. Use pgsc_calc_prepare_genomes first to generate files.
+
+input | description
+--- | ---
+scorefile | score file
+pgen | pgen file
+pvar | pvar file
+psam | psam file
+harmonize_scorefile | Boolean for whether to harmonize scorefile to consistent effect allele (default true)
+add_chr_prefix | Boolean for whether to add "chr" prefix to scorefile variant ids to match pvar (default true)
