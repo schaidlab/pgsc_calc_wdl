@@ -10,9 +10,9 @@ workflow pgsc_calc {
         Array[File]? psam
         Array[String] chromosome
         String target_build = "GRCh38"
-        Array[String] pgs_id
-        Boolean run_ancestry
-        File ref_panel = ""
+        File? pgs_id
+        File? scorefile
+        File? ancestry_ref_panel
         String sampleset_name = "cohort"
         Array[String]? arguments
     }
@@ -32,10 +32,10 @@ workflow pgsc_calc {
             pvar = select_first([prepare_genomes.pvar, pvar]),
             psam = select_first([prepare_genomes.psam, psam]),
             chromosome = chromosome,
+            scorefile = scorefile,
             pgs_id = pgs_id,
             target_build = target_build,
-            run_ancestry = run_ancestry,
-            ref_panel = ref_panel,
+            ancestry_ref_panel = ancestry_ref_panel,
             sampleset = sampleset_name,
             arguments = arguments
     }
@@ -60,9 +60,9 @@ task pgsc_calc_nextflow {
         Array[File] psam
         Array[String] chromosome
         String target_build
-        Array[String] pgs_id
-        Boolean run_ancestry
-        File ref_panel
+        String? pgs_id
+        File? scorefile
+        File? ancestry_ref_panel
         String sampleset
         Array[String]? arguments
         Int disk_gb = 128
@@ -70,7 +70,6 @@ task pgsc_calc_nextflow {
         Int cpu = 16
     }
 
-    String ancestry_arg = if (run_ancestry) then "--run_ancestry " + ref_panel else ""
 
     command <<<
         set -e -o pipefail
@@ -87,8 +86,9 @@ task pgsc_calc_nextflow {
         nextflow run pgscatalog/pgsc_calc -r v2.0.0-alpha.5 -profile conda \
             --input samplesheet.csv \
             --target_build ~{target_build} \
-            --pgs_id ~{sep="," pgs_id} \
-            ~{ancestry_arg} \
+            ~{"--pgs_id " + pgs_id} \
+            ~{"--scorefile " + scorefile} \
+            ~{"--run_ancestry " + ancestry_ref_panel} \
             ~{sep=" " arguments}
     >>>
 
@@ -100,8 +100,8 @@ task pgsc_calc_nextflow {
     }
 
     runtime {
-        #docker: "uwgac/pgsc_calc:0.1.0"
-        docker: "us-docker.pkg.dev/primed-cc/pgsc-calc/pgsc_calc:0.1.0"
+        docker: "uwgac/pgsc_calc:0.1.0"
+        #docker: "us-docker.pkg.dev/primed-cc/pgsc-calc/pgsc_calc:0.1.0"
         disks: "local-disk ~{disk_gb} SSD"
         memory: "~{mem_gb}G"
         cpu: "~{cpu}"
