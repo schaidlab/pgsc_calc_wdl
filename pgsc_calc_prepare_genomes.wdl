@@ -4,12 +4,14 @@ workflow pgsc_calc_prepare_genomes {
     input {
         Array[File] vcf
         Boolean merge_chroms = true
+        Boolean snps_only = true
     }
 
     scatter (file in vcf) {
         call prepare_genomes {
             input:
-                vcf = file
+                vcf = file,
+                snps_only = snps_only
         }
     }
 
