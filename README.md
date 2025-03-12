@@ -33,6 +33,7 @@ input | description
 --- | ---
 vcf | Array of VCF files
 merge_chroms | Boolean for whether to merge files to a single set of output files with all chromosomes
+snps_only | Boolean for whether to keep only SNPs in output
 
 output description
 --- | ---
