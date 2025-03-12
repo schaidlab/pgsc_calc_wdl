@@ -52,6 +52,7 @@ task harmonize_score_file {
         File scorefile
     }
 
+    Int disk_size = ceil(2.5*(size(scorefile, "GB"))) + 5
     String filename = basename(scorefile, ".gz")
 
     command <<<
@@ -78,7 +79,7 @@ task harmonize_score_file {
 
     runtime {
         docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
-        disks: "local-disk 10 SSD"
+        disks: "local-disk ~{disk_size} SSD"
         memory: "16G"
     }
 }
@@ -89,6 +90,7 @@ task chr_prefix {
         File file
     }
 
+    Int disk_size = ceil(2.5*(size(file, "GB"))) + 5
     String filename = basename(file, ".gz")
 
     command <<<
@@ -103,7 +105,7 @@ task chr_prefix {
 
     runtime {
         docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
-        disks: "local-disk 10 SSD"
+        disks: "local-disk ~{disk_size} SSD"
         memory: "16G"
     }
 }
@@ -113,6 +115,8 @@ task n_cols {
     input {
         File file
     }
+
+    Int disk_size = ceil(1.5*(size(file, "GB"))) + 5
 
     command <<<
         Rscript -e "dat <- readr::read_tsv('~{file}', n_max=10); writeLines(as.character(ncol(dat)), 'ncols.txt')"
@@ -124,7 +128,7 @@ task n_cols {
 
     runtime {
         docker: "rocker/tidyverse:4"
-        disks: "local-disk 10 SSD"
+        disks: "local-disk ~{disk_size} SSD"
         memory: "16G"
     }
 }
@@ -138,7 +142,11 @@ task plink_score {
         File pvar
         File psam
         String prefix = "out"
+        Int mem_gb = 16
+        Int cpu = 2
     }
+    
+    Int disk_size = ceil(1.5*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB") + size(scorefile, "GB"))) + 10
 
     command <<<
         plink2 --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
@@ -153,8 +161,8 @@ task plink_score {
 
     runtime {
         docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
-        disks: "local-disk 10 SSD"
-        memory: "16G"
-        cpu: 2
+        disks: "local-disk ~{disk_size} SSD"
+        memory: "~{mem_gb}G"
+        cpu: "~{cpu}"
     }
 }
