@@ -4,12 +4,14 @@ workflow pgsc_calc_prepare_genomes {
     input {
         Array[File] vcf
         Boolean merge_chroms = true
+        Boolean snps_only = true
     }
 
     scatter (file in vcf) {
         call prepare_genomes {
             input:
-                vcf = file
+                vcf = file,
+                snps_only = snps_only
         }
     }
 
@@ -38,6 +40,7 @@ workflow pgsc_calc_prepare_genomes {
 task prepare_genomes {
     input {
         File vcf
+        Boolean snps_only = true
         Int mem_gb = 16
         Int cpu = 2
     }
@@ -51,6 +54,8 @@ task prepare_genomes {
         plink2 ~{prefix} ~{vcf}  \
             --allow-extra-chr \
             --chr 1-22, X, Y, XY \
+            --set-all-var-ids @:#:\$r:\$a \
+            ~{true="--snps-only 'just-acgt' --max-alleles 2" false="" snps_only} \
             --make-pgen --out ~{basename}
     >>>
 
