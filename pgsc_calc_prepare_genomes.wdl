@@ -38,6 +38,7 @@ workflow pgsc_calc_prepare_genomes {
 task prepare_genomes {
     input {
         File vcf
+        Boolean snps_only = true
         Int mem_gb = 16
         Int cpu = 2
     }
@@ -52,6 +53,7 @@ task prepare_genomes {
             --allow-extra-chr \
             --chr 1-22, X, Y, XY \
             --set-all-var-ids @:#:\$r:\$a \
+            ~{true="--snps-only 'just-acgt' --max-alleles 2" false="" snps_only} \
             --make-pgen --out ~{basename}
     >>>
 
