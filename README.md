@@ -54,3 +54,9 @@ pvar | pvar file
 psam | psam file
 harmonize_scorefile | Boolean for whether to harmonize scorefile to consistent effect allele (default true)
 add_chr_prefix | Boolean for whether to add "chr" prefix to scorefile variant ids to match pvar (default true)
+
+output description
+--- | ---
+scores | sscore file output by plink
+variants | variants included in sscore
+overlap | TSV file with fraction of overlapping variants for each score

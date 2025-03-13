@@ -40,9 +40,16 @@ workflow calc_scores {
             psam = psam
     }
 
+    call compute_overlap {
+        input:
+            scorefile = scorefile_final,
+            variants = plink_score.variants
+    }
+
     output {
         File scores = plink_score.scores
         File variants = plink_score.variants
+        File overlap = compute_overlap.overlap
     }
 }
 
@@ -164,5 +171,39 @@ task plink_score {
         disks: "local-disk ~{disk_size} SSD"
         memory: "~{mem_gb}G"
         cpu: "~{cpu}"
+    }
+}
+
+
+task compute_overlap {
+    input {
+        File scorefile
+        File variants
+        Int mem_gb = 16
+    }
+
+    Int disk_size = ceil(1.5*(size(scorefile, "GB") + size(variants, "GB"))) + 5
+
+    command <<<
+        Rscript -e " \
+        library(tidyverse); \
+        score_vars <- read_tsv('~scorefile'); \
+        overlap_vars <- readLines('~variants'); \
+        vars <- pivot_longer(score_vars, starts_with('PGS'), names_to='score', values_to='weight'); \
+        vars <- filter(vars, weight != 0); \
+        vars <- arrange(vars, score); \
+        overlap <- summarise(group_by(vars, score), overlap=(sum(is.element(ID, overlap_vars))/n())); \
+        write_tsv(overlap, 'score_overlap.tsv'); \
+        "
+    >>>
+
+    output {
+        File overlap = "score_overlap.tsv"
+    }
+
+    runtime {
+        docker: "rocker/tidyverse:4"
+        disks: "local-disk ~{disk_size} SSD"
+        memory: "~{mem_gb}G"
     }
 }
