@@ -59,7 +59,7 @@ task harmonize_score_file {
         File scorefile
     }
 
-    Int disk_size = ceil(2.5*(size(scorefile, "GB"))) + 5
+    Int disk_size = ceil(5*(size(scorefile, "GB"))) + 10
     String filename = basename(scorefile, ".gz")
 
     command <<<
@@ -97,7 +97,7 @@ task chr_prefix {
         File file
     }
 
-    Int disk_size = ceil(2.5*(size(file, "GB"))) + 5
+    Int disk_size = ceil(5*(size(file, "GB"))) + 10
     String filename = basename(file, ".gz")
 
     command <<<
