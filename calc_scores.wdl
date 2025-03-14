@@ -189,10 +189,15 @@ task compute_overlap {
         library(tidyverse); \
         score_vars <- read_tsv('~{scorefile}'); \
         overlap_vars <- readLines('~{variants}'); \
-        vars <- pivot_longer(score_vars, starts_with('PGS'), names_to='score', values_to='weight'); \
-        vars <- filter(vars, weight != 0); \
-        vars <- arrange(vars, score); \
-        overlap <- summarise(group_by(vars, score), overlap=(sum(is.element(ID, overlap_vars))/n())); \
+        pgs <- names(score_vars)[str_detect(names(score_vars), '^PGS')]; \
+        overlap <- list(); \
+        for (p in pgs) { \
+            vars <- select(score_vars, ID, weight=!!p); \
+            vars <- filter(vars, weight != 0); \
+            ov <- sum(is.element(vars[['ID']], overlap_vars))/nrow(vars); \
+            overlap[[p]] <- tibble(score=p, overlap=ov); \
+        }; \
+        overlap <- bind_rows(overlap); \
         write_tsv(overlap, 'score_overlap.tsv'); \
         "
     >>>
