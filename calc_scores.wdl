@@ -187,8 +187,8 @@ task compute_overlap {
     command <<<
         Rscript -e " \
         library(tidyverse); \
-        score_vars <- read_tsv('~scorefile'); \
-        overlap_vars <- readLines('~variants'); \
+        score_vars <- read_tsv('~{scorefile}'); \
+        overlap_vars <- readLines('~{variants}'); \
         vars <- pivot_longer(score_vars, starts_with('PGS'), names_to='score', values_to='weight'); \
         vars <- filter(vars, weight != 0); \
         vars <- arrange(vars, score); \
