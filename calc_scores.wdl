@@ -179,10 +179,10 @@ task compute_overlap {
     input {
         File scorefile
         File variants
-        Int mem_gb = 16
+        Int mem_gb = 32
     }
 
-    Int disk_size = ceil(1.5*(size(scorefile, "GB") + size(variants, "GB"))) + 5
+    Int disk_size = ceil(3*(size(scorefile, "GB") + size(variants, "GB"))) + 10
 
     command <<<
         Rscript -e " \
