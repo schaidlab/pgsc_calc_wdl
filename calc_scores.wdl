@@ -179,7 +179,7 @@ task compute_overlap {
     input {
         File scorefile
         File variants
-        Int mem_gb = 32
+        Int mem_gb = 64
     }
 
     Int disk_size = ceil(3*(size(scorefile, "GB") + size(variants, "GB"))) + 10
