@@ -189,6 +189,7 @@ task compute_overlap {
         library(tidyverse); \
         score_vars <- read_tsv('~{scorefile}'); \
         overlap_vars <- readLines('~{variants}'); \
+        names(score_vars)[1] <- 'ID'; \
         pgs <- names(score_vars)[str_detect(names(score_vars), '^PGS')]; \
         overlap <- list(); \
         for (p in pgs) { \
