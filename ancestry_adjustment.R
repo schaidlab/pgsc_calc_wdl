@@ -71,7 +71,7 @@ adjust_prs <- function(scores, pcs, mean_coef, var_coef) {
             filter(score == s) %>%
             select(starts_with("PC")) %>%
             unlist()
-        score_adj[[s]] <- (score - (mean_intercept + rowSums(sweep(pcmat, 2, mean_pcs, `*`)))) / sqrt(var_intercept + rowSums(sweep(pcmat, 2, var_pcs, `*`)))
+        score_adj[[s]] <- (score - (mean_intercept + rowSums(pcmat %*% mean_pcs))) / sqrt(var_intercept + rowSums(pcmat %*% var_pcs))
     }
     score_adj <- bind_cols(score_adj)
     score_adj <- bind_cols(tibble(IID=samples, score_adj))
