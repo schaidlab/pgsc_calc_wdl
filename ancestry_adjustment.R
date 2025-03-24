@@ -25,7 +25,8 @@ fit_prs <- function(scores, pcs) {
         
         dat$residsq <- (pcmod$residuals)^2
         model_string <- paste("residsq ~", paste(pccols, collapse="+"))
-        pcmod2 <- lm(model_string, data=dat)
+        # use Gamma regression with log link to avoid negative values
+        pcmod2 <- glm(model_string, family = Gamma(link = "log"), data = dat)
         var_coef[[s]] <- pcmod2$coefficients
     }
     prep_output <- function(x) {
@@ -71,7 +72,7 @@ adjust_prs <- function(scores, pcs, mean_coef, var_coef) {
             filter(score == s) %>%
             select(starts_with("PC")) %>%
             unlist()
-        score_adj[[s]] <- (score - (mean_intercept + rowSums(pcmat %*% mean_pcs))) / sqrt(var_intercept + rowSums(pcmat %*% var_pcs))
+        score_adj[[s]] <- (score - (mean_intercept + as.vector(pcmat %*% mean_pcs))) / sqrt(exp(var_intercept + as.vector(pcmat %*% var_pcs)))
     }
     score_adj <- bind_cols(score_adj)
     score_adj <- bind_cols(tibble(IID=samples, score_adj))
