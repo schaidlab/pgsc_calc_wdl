@@ -1,5 +1,7 @@
 version 1.0
 
+import "adjust_scores.wdl" as adjust_scores
+
 workflow calc_scores {
     input {
         File scorefile
@@ -8,6 +10,10 @@ workflow calc_scores {
         File psam
         Boolean harmonize_scorefile = true
         Boolean add_chr_prefix = true
+        Boolean ancestry_adjust = true
+        File? pcs
+        File? mean_coef
+        File? var_coef
     }
 
     if (harmonize_scorefile) {
@@ -46,8 +52,18 @@ workflow calc_scores {
             variants = plink_score.variants
     }
 
+    if (ancestry_adjust) {
+        call adjust_scores.adjust_prs {
+            input:
+                scores = plink_score.scores,
+                pcs = select_first([pcs, ""]),
+                mean_coef = select_first([mean_coef, ""]),
+                var_coef = select_first([var_coef, ""])
+        }
+    }
+
     output {
-        File scores = plink_score.scores
+        File scores = select_first([adjust_prs.adjusted_scores, plink_score.scores])
         File variants = plink_score.variants
         File overlap = compute_overlap.overlap
     }
