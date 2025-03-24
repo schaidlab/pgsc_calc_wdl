@@ -35,9 +35,9 @@ task find_ancestry_coefficients {
         scores <- read_tsv('~{scores}'); \
         pcs <- read_tsv('~{pcs}'); \
         scores <- prep_scores(scores); \
-        coef <- fit_prs(scores, pcs); \
-        write_tsv(coef$mean_coef, 'mean_coef.txt'); \
-        write_tsv(coef$var_coef, 'var_coef.txt'); \
+        model <- fit_prs(scores, pcs); \
+        write_tsv(model[['mean_coef']], 'mean_coef.txt'); \
+        write_tsv(model[['var_coef']], 'var_coef.txt'); \
         "
     >>>
 
