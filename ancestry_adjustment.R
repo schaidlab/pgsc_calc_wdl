@@ -26,7 +26,10 @@ fit_prs <- function(scores, pcs) {
         dat$residsq <- (pcmod$residuals)^2
         model_string <- paste("residsq ~", paste(pccols, collapse="+"))
         # use Gamma regression with log link to avoid negative values
-        pcmod2 <- glm(model_string, family = Gamma(link = "log"), data = dat)
+        pcmod2 <- tryCatch({
+                glm(model_string, family=Gamma(link = "log"), data=dat, control=list(maxit=1000))
+            }, error = function(e) return(list(coefficients=setNames(rep(as.integer(NA), length(pcmod$coefficients)), names(pcmod$coefficients))))
+        )
         var_coef[[s]] <- pcmod2$coefficients
     }
     prep_output <- function(x) {
