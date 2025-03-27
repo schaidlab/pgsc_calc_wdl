@@ -32,10 +32,14 @@ task subset_scorefile {
     command <<<
         set -e -o pipefail
         zcat ~{scorefile} | head -n 1 > header.txt
+        head header.txt
         zcat ~{scorefile} | awk 'FNR==NR{a[$1]; next}{if($1 in a){print $0}}' ~{variants} ~{scorefile} > tmp.txt
+        head tmp.txt
         rm ~{scorefile}
         cat header.txt tmp.txt > ~{filename}_subset
+        head ~{filename}_subset
         gzip ~{filename}_subset
+        ls
     >>>
 
     output {
