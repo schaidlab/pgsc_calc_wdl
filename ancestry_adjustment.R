@@ -28,7 +28,11 @@ fit_prs <- function(scores, pcs) {
         # use Gamma regression with log link to avoid negative values
         pcmod2 <- tryCatch({
                 glm(model_string, family=Gamma(link = "log"), data=dat, control=list(maxit=1000))
-            }, error = function(e) return(list(coefficients=setNames(rep(as.integer(NA), length(pcmod$coefficients)), names(pcmod$coefficients))))
+            }, error = function(e) {
+                #coefs <- rep(as.integer(NA), length(pcmod$coefficients))
+                coefs <- c(var(pcmod$residuals), rep(0, length(pccols)))
+                return(list(coefficients=setNames(coefs, names(pcmod$coefficients))))
+            }
         )
         var_coef[[s]] <- pcmod2$coefficients
     }
