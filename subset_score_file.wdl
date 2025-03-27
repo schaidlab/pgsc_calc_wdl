@@ -30,7 +30,7 @@ task subset_scorefile {
     String filename = basename(scorefile, ".gz")
 
     command <<<
-        set -e -o pipefail
+        #set -e -o pipefail
         zcat ~{scorefile} | head -n 1 > header.txt
         head header.txt
         zcat ~{scorefile} | awk 'FNR==NR{a[$1]; next}{if($1 in a){print $0}}' ~{variants} ~{scorefile} > tmp.txt
