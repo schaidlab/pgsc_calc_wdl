@@ -30,7 +30,7 @@ fit_prs <- function(scores, pcs) {
                 glm(model_string, family=Gamma(link = "log"), data=dat, control=list(maxit=1000))
             }, error = function(e) {
                 #coefs <- rep(as.integer(NA), length(pcmod$coefficients))
-                coefs <- c(var(pcmod$residuals), rep(0, length(pccols)))
+                coefs <- c(log(var(pcmod$residuals)), rep(0, length(pccols)))
                 return(list(coefficients=setNames(coefs, names(pcmod$coefficients))))
             }
         )
