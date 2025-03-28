@@ -10,7 +10,7 @@ workflow calc_scores {
         File pvar
         File psam
         Boolean harmonize_scorefile = true
-        Boolean add_chr_prefix = true
+        Boolean add_chr_prefix = false
         Boolean ancestry_adjust = true
         File? pcs
         File? mean_coef
