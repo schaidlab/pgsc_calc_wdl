@@ -23,23 +23,21 @@ task subset_scorefile {
     input {
         File scorefile
         File variants
-        Int mem_gb = 16
+        Int mem_gb = 64
     }
 
     Int disk_size = ceil(5*(size(scorefile, "GB") + size(variants, "GB"))) + 10
     String filename = basename(scorefile, ".gz")
 
     command <<<
-        #set -e -o pipefail
-        zcat ~{scorefile} | head -n 1 > header.txt
-        head header.txt
-        zcat ~{scorefile} | awk 'FNR==NR{a[$1]; next}{if($1 in a){print $0}}' ~{variants} ~{scorefile} > tmp.txt
-        head tmp.txt
-        rm ~{scorefile}
-        cat header.txt tmp.txt > ~{filename}_subset
-        head ~{filename}_subset
-        gzip ~{filename}_subset
-        ls
+        Rscript -e " \
+        library(tidyverse); \
+        score_vars <- read_tsv('~{scorefile}'); \
+        overlap_vars <- readLines('~{variants}'); \
+        names(score_vars)[1] <- 'ID'; \
+        score_vars <- filter(score_vars, is.element(ID, overlap_vars)); \
+        write_tsv(score_vars, '~{filename}_subset.gz'); \
+        "
     >>>
 
     output {
