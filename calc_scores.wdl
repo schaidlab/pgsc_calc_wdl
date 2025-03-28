@@ -1,6 +1,7 @@
 version 1.0
 
 import "adjust_scores.wdl" as adjust_scores
+import "subset_score_file.wdl" as subset
 
 workflow calc_scores {
     input {
@@ -14,6 +15,7 @@ workflow calc_scores {
         File? pcs
         File? mean_coef
         File? var_coef
+        File? subset_variants
     }
 
     if (harmonize_scorefile) {
@@ -30,7 +32,15 @@ workflow calc_scores {
         }
     }
 
-    File scorefile_final = select_first([chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile])
+    if (defined(subset_variants)) {
+        call subset.subset_scorefile {
+            input:
+                scorefile = select_first([chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile]),
+                variants = select_first([subset_variants, ""])
+        }
+    }
+
+    File scorefile_final = select_first([subset_scorefile.scorefile_subset, chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile])
 
     call n_cols {
         input:
