@@ -63,7 +63,8 @@ workflow calc_scores {
     }
 
     output {
-        File scores = select_first([adjust_prs.adjusted_scores, plink_score.scores])
+        File scores = plink_score.scores
+        File? adjusted_scores = adjust_prs.adjusted_scores
         File variants = plink_score.variants
         File overlap = compute_overlap.overlap
     }
@@ -212,7 +213,7 @@ task compute_overlap {
             vars <- select(score_vars, ID, weight=!!p); \
             vars <- filter(vars, weight != 0); \
             ov <- sum(is.element(vars[['ID']], overlap_vars))/nrow(vars); \
-            overlap[[p]] <- tibble(score=p, overlap=ov); \
+            overlap[[p]] <- tibble(score=p, n_variants=nrow(vars), overlap=ov); \
         }; \
         overlap <- bind_rows(overlap); \
         write_tsv(overlap, 'score_overlap.tsv'); \
