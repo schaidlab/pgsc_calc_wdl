@@ -45,7 +45,7 @@ task subset_scorefile {
     }
 
     runtime {
-        docker: "quay.io/biocontainers/plink2:2.00a5.12--h4ac6f70_0"
+        docker: "rocker/tidyverse:4"
         disks: "local-disk ~{disk_size} SSD"
         memory: "~{mem_gb}G"
     }
