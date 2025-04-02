@@ -58,7 +58,7 @@ workflow calc_scores {
 
     call compute_overlap {
         input:
-            scorefile = scorefile_final,
+            scorefile = select_first([chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile]),
             variants = plink_score.variants
     }
 
