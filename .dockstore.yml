@@ -22,4 +22,7 @@ workflows:
    - name: subset_score_file
      subclass: WDL
      primaryDescriptorPath: /subset_score_file.wdl
+   - name: summarize_score_weights
+     subclass: WDL
+     primaryDescriptorPath: /summarize_score_weights.wdl
      

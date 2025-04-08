@@ -13,6 +13,7 @@ compute_overlap <- function(score_vars, overlap_vars) {
     bind_rows(overlap)
 }
 
+
 weighted_sum <- function(score_vars) {
     names(score_vars)[1] <- 'ID'
     pgs <- names(score_vars)[str_detect(names(score_vars), '^PGS')]
@@ -25,3 +26,13 @@ weighted_sum <- function(score_vars) {
     }
     bind_rows(wtsum)
 }
+
+
+weighted_sum_overlap <- function(score_vars, overlap_vars=NULL) {
+    if (!is.null(overlap_vars)) {
+        names(score_vars)[1] <- 'ID'
+        score_vars <- filter(score_vars, ID %in% overlap_vars)
+    }
+    weighted_sum(score_vars)
+}
+
