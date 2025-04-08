@@ -71,7 +71,7 @@ task score_weight_abs_sum_overlap {
         source('https://raw.githubusercontent.com/UW-GAC/pgsc_calc_wdl/refs/heads/ancestry_adjust/score_stats.R'); \
         score_vars <- read_tsv('~{scorefile}'); \
         overlap_vars <- readLines('~{variants}'); \
-        score_wts <- weighted_sum(score_vars, overlap_vars); \
+        score_wts <- weighted_sum_overlap(score_vars, overlap_vars); \
         write_tsv(score_wts, 'score_weights.txt'); \
         "
     >>>
