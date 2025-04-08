@@ -29,7 +29,10 @@ workflow summarize_score_weights {
 task score_weight_abs_sum_all {
     input {
         File scorefile
+        Int mem_gb = 64
     }
+
+    Int disk_size = ceil(3*(size(scorefile, "GB"))) + 10
 
     command <<<
         Rscript -e " \
@@ -44,6 +47,12 @@ task score_weight_abs_sum_all {
     output {
         File score_weights = "score_weights.txt"
     }
+
+    runtime {
+        docker: "rocker/tidyverse:4"
+        disks: "local-disk ~{disk_size} SSD"
+        memory: "~{mem_gb}G"
+    }
 }
 
 
@@ -51,7 +60,10 @@ task score_weight_abs_sum_overlap {
     input {
         File scorefile
         File variants
+        Int mem_gb = 64
     }
+
+    Int disk_size = ceil(3*(size(scorefile, "GB") + size(variants, "GB"))) + 10
 
     command <<<
         Rscript -e " \
@@ -66,5 +78,11 @@ task score_weight_abs_sum_overlap {
 
     output {
         File score_weights = "score_weights.txt"
+    }
+
+    runtime {
+        docker: "rocker/tidyverse:4"
+        disks: "local-disk ~{disk_size} SSD"
+        memory: "~{mem_gb}G"
     }
 }
