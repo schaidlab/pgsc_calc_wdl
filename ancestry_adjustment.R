@@ -4,7 +4,8 @@ library(stringr)
 prep_scores <- function(scores) {
     scores2 <- scores %>%
         select(IID=`#IID`, ends_with("_SUM")) %>%
-        select(IID, starts_with("PGS"))
+        select(IID, starts_with("PGS")) %>%
+        mutate(IID = as.character(IID))
     names(scores2) <- str_replace(names(scores2), "_SUM", "")
     return(scores2)
 }
@@ -90,6 +91,8 @@ adjust_prs <- function(scores, pcs, mean_coef, var_coef) {
 prep_groups <- function(groups) {
     groups2 <- groups[,1:2]
     names(groups2) <- c("IID", "group")
+    groups2$IID <- as.character(groups2$IID)
+    groups2$group <- as.character(groups2$group)
     return(groups2)
 }
 
