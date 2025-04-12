@@ -19,6 +19,9 @@ workflows:
    - name: adjust_scores
      subclass: WDL
      primaryDescriptorPath: /adjust_scores.wdl
+   - name: adjust_scores_empirical
+     subclass: WDL
+     primaryDescriptorPath: /adjust_scores_empirical.wdl
    - name: subset_score_file
      subclass: WDL
      primaryDescriptorPath: /subset_score_file.wdl

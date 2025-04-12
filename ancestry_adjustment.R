@@ -85,3 +85,32 @@ adjust_prs <- function(scores, pcs, mean_coef, var_coef) {
     score_adj <- bind_cols(tibble(IID=samples, score_adj))
     return(score_adj)
 }
+
+
+prep_groups <- function(groups) {
+    groups2 <- groups[,1:2]
+    names(groups2) <- c("IID", "group")
+    return(groups2)
+}
+
+
+adjust_prs_empirical <- function(scores, groups) {
+    dat <- inner_join(groups, scores)
+    samples <- dat$IID
+    
+    all_scores <- names(scores)[-1]
+    grp_list <- list()
+    for (g in unique(dat$group)) {
+        z_list <- list()
+        tmp <- filter(dat, group == g)
+        for (s in all_scores) {
+            score <- tmp %>%
+                select(!!s) %>%
+                unlist()
+            z_list[[s]] = (score - mean(score, na.rm=TRUE)) / sd(score, na.rm=TRUE)
+        }
+        z_list <- bind_cols(z_list)
+        grp_list[[g]] <- bind_cols(tibble(IID=tmp$IID, group=g, z_list))
+    }
+    return(bind_rows(grp_list))
+}
