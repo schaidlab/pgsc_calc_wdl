@@ -1,5 +1,6 @@
 version 1.0
 
+import "fit_ancestry_model.wdl" as fit_ancestry
 import "adjust_scores.wdl" as adjust_scores
 import "subset_score_file.wdl" as subset
 
@@ -13,8 +14,8 @@ workflow calc_scores {
         Boolean add_chr_prefix = false
         Boolean ancestry_adjust = true
         File? pcs
-        File? mean_coef
-        File? var_coef
+        #File? mean_coef
+        #File? var_coef
         File? subset_variants
     }
 
@@ -63,12 +64,18 @@ workflow calc_scores {
     }
 
     if (ancestry_adjust) {
+        call fit_ancestry.find_ancestry_coefficients {
+            input:
+                scores = plink_score.scores,
+                pcs = select_first([pcs, ""])
+        }
+
         call adjust_scores.adjust_prs {
             input:
                 scores = plink_score.scores,
                 pcs = select_first([pcs, ""]),
-                mean_coef = select_first([mean_coef, ""]),
-                var_coef = select_first([var_coef, ""])
+                mean_coef = find_ancestry_coefficients.mean_coef,
+                var_coef = find_ancestry_coefficients.var_coef
         }
     }
 
