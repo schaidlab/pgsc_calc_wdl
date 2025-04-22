@@ -13,4 +13,19 @@ workflows:
    - name: calc_scores
      subclass: WDL
      primaryDescriptorPath: /calc_scores.wdl
+   - name: fit_ancestry_model
+     subclass: WDL
+     primaryDescriptorPath: /fit_ancestry_model.wdl
+   - name: adjust_scores
+     subclass: WDL
+     primaryDescriptorPath: /adjust_scores.wdl
+   - name: adjust_scores_empirical
+     subclass: WDL
+     primaryDescriptorPath: /adjust_scores_empirical.wdl
+   - name: subset_score_file
+     subclass: WDL
+     primaryDescriptorPath: /subset_score_file.wdl
+   - name: summarize_score_weights
+     subclass: WDL
+     primaryDescriptorPath: /summarize_score_weights.wdl
      

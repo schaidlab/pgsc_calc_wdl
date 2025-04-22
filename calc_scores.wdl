@@ -1,5 +1,9 @@
 version 1.0
 
+import "fit_ancestry_model.wdl" as fit_ancestry
+import "adjust_scores.wdl" as adjust_scores
+import "subset_score_file.wdl" as subset
+
 workflow calc_scores {
     input {
         File scorefile
@@ -7,7 +11,12 @@ workflow calc_scores {
         File pvar
         File psam
         Boolean harmonize_scorefile = true
-        Boolean add_chr_prefix = true
+        Boolean add_chr_prefix = false
+        Boolean ancestry_adjust = true
+        File? pcs
+        #File? mean_coef
+        #File? var_coef
+        File? subset_variants
     }
 
     if (harmonize_scorefile) {
@@ -24,7 +33,15 @@ workflow calc_scores {
         }
     }
 
-    File scorefile_final = select_first([chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile])
+    if (defined(subset_variants)) {
+        call subset.subset_scorefile {
+            input:
+                scorefile = select_first([chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile]),
+                variants = select_first([subset_variants, ""])
+        }
+    }
+
+    File scorefile_final = select_first([subset_scorefile.scorefile_subset, chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile])
 
     call n_cols {
         input:
@@ -42,12 +59,29 @@ workflow calc_scores {
 
     call compute_overlap {
         input:
-            scorefile = scorefile_final,
+            scorefile = select_first([chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile]),
             variants = plink_score.variants
+    }
+
+    if (ancestry_adjust) {
+        call fit_ancestry.find_ancestry_coefficients {
+            input:
+                scores = plink_score.scores,
+                pcs = select_first([pcs, ""])
+        }
+
+        call adjust_scores.adjust_prs {
+            input:
+                scores = plink_score.scores,
+                pcs = select_first([pcs, ""]),
+                mean_coef = find_ancestry_coefficients.mean_coef,
+                var_coef = find_ancestry_coefficients.var_coef
+        }
     }
 
     output {
         File scores = plink_score.scores
+        File? adjusted_scores = adjust_prs.adjusted_scores
         File variants = plink_score.variants
         File overlap = compute_overlap.overlap
     }
@@ -196,7 +230,7 @@ task compute_overlap {
             vars <- select(score_vars, ID, weight=!!p); \
             vars <- filter(vars, weight != 0); \
             ov <- sum(is.element(vars[['ID']], overlap_vars))/nrow(vars); \
-            overlap[[p]] <- tibble(score=p, overlap=ov); \
+            overlap[[p]] <- tibble(score=p, n_variants=nrow(vars), overlap=ov); \
         }; \
         overlap <- bind_rows(overlap); \
         write_tsv(overlap, 'score_overlap.tsv'); \
