@@ -4,12 +4,18 @@ workflow fit_ancestry_model {
     input {
         File scores
         File pcs
+        File adjust_script
+        String RSCRIPT
+        Int mem_gb = 16
     }
 
     call find_ancestry_coefficients {
         input:
             scores = scores,
-            pcs = pcs
+            pcs = pcs,
+            RSCRIPT = RSCRIPT,
+            adjust_script = adjust_script,
+            mem_gb = mem_gb
     }
 
     output {
@@ -24,14 +30,16 @@ task find_ancestry_coefficients {
         File scores
         File pcs
         Int mem_gb = 16
+        String RSCRIPT
+        File adjust_script
     }
 
-    Int disk_size = ceil(2.5*(size(scores, "GB") + size(pcs, "GB"))) + 10
+    #Int disk_size = ceil(2.5*(size(scores, "GB") + size(pcs, "GB"))) + 10
 
     command <<<
-        Rscript -e "
+        ~{RSCRIPT} -e "
         library(readr); \
-        source('https://raw.githubusercontent.com/UW-GAC/pgsc_calc_wdl/refs/heads/ancestry_adjust/ancestry_adjustment.R'); \
+        source('~{adjust_script}'); \
         scores <- read_tsv('~{scores}'); \
         pcs <- read_tsv('~{pcs}'); \
         scores <- prep_scores(scores); \
@@ -47,8 +55,8 @@ task find_ancestry_coefficients {
     }
 
     runtime {
-        docker: "rocker/tidyverse:4"
-        disks: "local-disk ~{disk_size} SSD"
-        memory: "~{mem_gb}G"
+        #docker: "rocker/tidyverse:4"
+        #disks: "local-disk ~{disk_size} SSD"
+        memory: "~{mem_gb} GB"
     }
 }

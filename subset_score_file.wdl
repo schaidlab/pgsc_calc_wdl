@@ -4,12 +4,16 @@ workflow subset_score_file {
     input {
         File scorefile
         File variants
+        String RSCRIPT
+        Int mem_gb 64
     }
 
     call subset_scorefile {
         input:
             scorefile = scorefile,
-            variants = variants
+            variants = variants,
+            RSCRIPT = RSCRIPT,
+            mem_gb = mem_gb
     }
 
     output {
@@ -24,13 +28,14 @@ task subset_scorefile {
         File scorefile
         File variants
         Int mem_gb = 64
+        String RSCRIPT
     }
 
-    Int disk_size = ceil(5*(size(scorefile, "GB") + size(variants, "GB"))) + 10
+    #Int disk_size = ceil(5*(size(scorefile, "GB") + size(variants, "GB"))) + 10
     String filename = basename(scorefile, ".gz")
 
     command <<<
-        Rscript -e " \
+        ~{RSCRIPT} -e " \
         library(tidyverse); \
         score_vars <- read_tsv('~{scorefile}'); \
         overlap_vars <- readLines('~{variants}'); \
@@ -45,8 +50,8 @@ task subset_scorefile {
     }
 
     runtime {
-        docker: "rocker/tidyverse:4"
-        disks: "local-disk ~{disk_size} SSD"
-        memory: "~{mem_gb}G"
+        #docker: "rocker/tidyverse:4"
+        #disks: "local-disk ~{disk_size} SSD"
+        memory: "~{mem_gb} GB"
     }
 }
