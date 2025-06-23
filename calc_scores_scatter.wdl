@@ -4,7 +4,7 @@ import "fit_ancestry_model.wdl" as fit_ancestry_model
 import "adjust_scores.wdl" as adjust_scores
 import "subset_score_file.wdl" as subset
 
-workflow calc_scores {
+workflow calc_scores_scatter {
     input {
         Array[File] scorefile
         File pgen
@@ -52,7 +52,7 @@ workflow calc_scores {
         call n_cols {
             input:
                 file = scorefile_final,
-		RSCRIPT = RSCRIPT
+                RSCRIPT = RSCRIPT
         }
 
  
@@ -63,14 +63,14 @@ workflow calc_scores {
                 pgen = pgen,
                 pvar = pvar,
                 psam = psam,
-		PLINK2 = PLINK2
+                PLINK2 = PLINK2
         }
 
         call compute_overlap {
             input:
                 scorefile = select_first([chr_prefix.outfile, harmonize_score_file.scorefile_harmonized, scorefile_final]),
                 variants = plink_score.variants,
-	        RSCRIPT = RSCRIPT
+                RSCRIPT = RSCRIPT
         }
 
         if (ancestry_adjust) {
@@ -78,15 +78,15 @@ workflow calc_scores {
                 input:
                     scores = plink_score.scores,
                     pcs = select_first([pcs, ""]),
-		    RSCRIPT = RSCRIPT,
-		    adjust_script = adjust_script
+                    RSCRIPT = RSCRIPT,
+                    adjust_script = adjust_script
             }
 
             call adjust_scores.adjust_scores {
                 input:
                     scores = plink_score.scores,
                     pcs = select_first([pcs, ""]),
-                    mean_coef = fit_ancestry_mdoel.mean_coef,
+                    mean_coef = fit_ancestry_model.mean_coef,
                     var_coef = fit_ancestry_model.var_coef,
 		    RSCRIPT = RSCRIPT,
 		    adjust_script = adjust_script
@@ -94,8 +94,8 @@ workflow calc_scores {
         }
 
         File score = plink_score.scores
-	File? adjusted_score = adjust_scores.adjusted_scores
-	File overlap = compute_overlap.overlap
+        File? adjusted_score = adjust_scores.adjusted_scores
+        File overlap = compute_overlap.overlap
 
     }
 
@@ -108,19 +108,19 @@ workflow calc_scores {
 
     if (defined(adjusted_scores)) {
         call aggregate_results {
-	    input:
-	        raw_scores = scores,
-		adjusted_scores = adjusted_scores,
-		overlap_files = overlaps,
-		RSCRIPT = RSCRIPT,
-		aggregate_script = aggregate_script
+            input:
+                raw_scores = scores,
+	        adjusted_scores = adjusted_scores,
+	        overlap_files = overlaps,
+	        RSCRIPT = RSCRIPT,
+	        aggregate_script = aggregate_script
          }
     }
      
     output {
         File? aggregate_scores = select_first([aggregate_results.aggregate_raw, scores])
-	File? aggregate_adjusted_scores = aggregate_results.aggregate_adjusted
-	File? score_overlap = select_first([aggregate_results.aggregate_overlap, overlaps])
+        File? aggregate_adjusted_scores = aggregate_results.aggregate_adjusted
+        File? score_overlap = select_first([aggregate_results.aggregate_overlap, overlaps])
     }
 }
 
@@ -192,7 +192,7 @@ task chr_prefix {
 task n_cols {
     input {
         File file
-	String RSCRIPT
+        String RSCRIPT
     }
 
     #Int disk_size = ceil(1.5*(size(file, "GB"))) + 5
@@ -223,7 +223,7 @@ task plink_score {
         String prefix = "out"
         Int mem_gb = 16
         Int cpu = 2
-	String PLINK2
+        String PLINK2
     }
     
     #Int disk_size = ceil(1.5*(size(pgen, "GB") + size(pvar, "GB") + size(psam, "GB") + size(scorefile, "GB"))) + 10
@@ -231,8 +231,8 @@ task plink_score {
     command <<<
         ~{PLINK2} --pgen ~{pgen} --pvar ~{pvar} --psam ~{psam} --score ~{scorefile} \
             no-mean-imputation header-read list-variants cols=+scoresums \
-	    --memory 10000 \
-	    --score-col-nums 3-~{scorefile_ncols} \
+            --memory 10000 \
+            --score-col-nums 3-~{scorefile_ncols} \
             --out ~{prefix}
     >>>
 
@@ -255,7 +255,7 @@ task compute_overlap {
         File scorefile
         File variants
         Int mem_gb = 64
-	String RSCRIPT
+        String RSCRIPT
     }
 
     #Int disk_size = ceil(3*(size(scorefile, "GB") + size(variants, "GB"))) + 10
@@ -299,8 +299,8 @@ task aggregate_results {
         String RSCRIPT
         File aggregate_script
         String prefix = "all"
-	Int mem_gb = 8
-    }
+        Int mem_gb = 8
+     }
 
     command <<<
         ~{RSCRIPT} ~{aggregate_script} \
