@@ -37,3 +37,4 @@ weighted_sum_overlap <- function(score_vars, overlap_vars=NULL) {
     weighted_sum(score_vars)
 }
 
+ 
