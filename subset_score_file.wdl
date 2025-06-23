@@ -5,7 +5,7 @@ workflow subset_score_file {
         File scorefile
         File variants
         String RSCRIPT
-        Int mem_gb 64
+        Int mem_gb = 64
     }
 
     call subset_scorefile {
