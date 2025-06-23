@@ -1,0 +1,36 @@
+{
+    "calc_scores.scorefile": [
+        "/full/path/location/pgscat_weight_00_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_01_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_02_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_03_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_04_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_05_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_06_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_07_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_08_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_09_allchr_additive_0.scorefile.gz",
+        "/full/path/location/pgscat_weight_10_allchr_additive_0.scorefile.gz"
+    ],
+    "calc_scores_scatter.pgen": "/full/path/to/full-genome/plink/merged.pgen",
+    "calc_scores_scatter.psam": "/full/path/to/full-genome/plink/merged.psam",
+    "calc_scores_scatter.pvar": "/full/path/to/full-genome/plink/merged.pvar",
+    "calc_scores_scatter.pcs": "/full/path/to/pca_projection.file",
+    "calc_scores_scatter.adjust_scores.mem_gb": 8,
+    "calc_scores_scatter.plink_score.mem_gb": 6,
+    "calc_scores_scatter.plink_score.cpu": 8,
+    "calc_scores_scatter.harmonize_scorefile": false,
+    "calc_scores_scatter.fit_ancestry_model.mem_gb": 4,
+    "calc_scores_scatter.ancestry_adjust": true,
+    "calc_scores_scatter.subset_variants": null,
+    "calc_scores_scatter.compute_overlap.mem_gb": 64,
+    "calc_scores_scatter.subset_scorefile.mem_gb": 64,
+    "calc_scores_scatter.add_chr_prefix": false,
+    "calc_scores_scatter.adjust_script": "/path/to/repo/pgsc_calc_wdl/ancestry_adjustment.R",
+    "calc_scores_scatter.aggregate_script": "/path/to/repo/pgsc_calc_wdl/aggregate_scores.R",
+    "calc_scores_scatter.aggregate_results.mem_gb": 20,
+    "calc_scores_scatter.aggregate_results.prefix": "emerge",
+    "calc_scores_scatter.RSCRIPT": "/path/to/Rscript/install/Rscript",
+    "calc_scores_scatter.PLINK2": "/path/to/plink2/install/plink2"
+}
+
