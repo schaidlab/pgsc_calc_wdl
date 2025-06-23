@@ -61,3 +61,4 @@ scores | sscore file output by plink
 variants | variants included in sscore
 overlap | TSV file with fraction of overlapping variants for each score
  
+ 
