@@ -4,10 +4,10 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 ## Tool versions
 
-Java >= jdk 11.0
-Cromwell 83
-Plink2:   v2.00a.6LM.2023.1123
-Rscript   R-4.4.1
+  - Java >= jdk 11.0
+  - Cromwell 83
+  - Plink2:   v2.00a.6LM.2023.1123
+  - Rscript   R-4.4.1
 
 
 ## pgsc_calc_prepare_genomes
