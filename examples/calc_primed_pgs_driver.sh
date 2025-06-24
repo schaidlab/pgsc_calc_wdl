@@ -20,13 +20,13 @@
 ##
 ##  3. Generate json templates using womtool-83.jar
 ##     a. for pgsc_calc_prepare_genomes.wdl
-##     b. for calc_scores.wdl
+##     b. for calc_scores_scatter.wdl
 ##
 ##  4. Prepare genotype data
 ##     a. Update json for this project
 ##     b. Run pgsc_calc_prepare_genomes.wdl
 ##
-##  5. Run calc_scores.wdl
+##  5. Run calc_scores_scatter.wdl
 ##     a. Update json for this script (created in 2)
 ##        NOTE: PGEN/PVAR/PSAM inputs for calc_scores JSON may be dependent on completion of pgsc_calc_prepare_genomes.wdl
 ##     b. Set add_chr_prefix = TRUE (pgsc_calc_prepare_genomes workflow produces files without prefix)
@@ -84,7 +84,7 @@ nohup java -Dconfig.file=${CFGDIR}/slurm.conf -Djava.io.tmpdir=${TMPDIR} -jar ${
 ##       iv. Submit jobs to generate PGS & perform ancestry-adjustment for each batch of scores
 ##
 
-nohup java -Dconfig.file=${CFGDIR}/slurm.conf -Djava.io.tmpdir=${TMPDIR} -jar  ${cromwell}/cromwell-83.jar run ${PIPEDIR}/calc_scores.wdl --inputs ${CFGDIR}/calc_scores_emerge.json > calc_scores.${today}.log 2>&1 &
+nohup java -Dconfig.file=${CFGDIR}/slurm.conf -Djava.io.tmpdir=${TMPDIR} -jar  ${cromwell}/cromwell-83.jar run ${PIPEDIR}/calc_scores_scatter.wdl --inputs ${CFGDIR}/calc_scores_emerge.json > calc_scores.${today}.log 2>&1 &
 
 
 
