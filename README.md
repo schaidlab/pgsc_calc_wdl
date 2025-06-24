@@ -2,6 +2,14 @@
 
 WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm on a high performance computing (HPC) environment. This repo builds off of [Stephanie Gogarten's calc_scores.wdl pipeline](https://github.com/UW-GAC/pgsc_calc_wdl/blob/main/README.md) which calculates scores without using Nextflow. All scripts were authored by Stephanie Gogarten unless otherwise notes. 
 
+## Tool versions
+
+Java >= jdk 11.0
+Cromwell 83
+Plink2:   v2.00a.6LM.2023.1123
+Rscript   R-4.4.1
+
+
 ## pgsc_calc_prepare_genomes
 
 Standalone workflow to convert VCF to pgen/pvar/psam.

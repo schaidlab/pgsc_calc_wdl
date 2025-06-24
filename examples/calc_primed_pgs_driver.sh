@@ -34,15 +34,15 @@
 ############
 
 
-STUDYDIR=/research/staging/emerge-bsi
-PIPEDIR=/research/staging/emerge-bsi/scripts/pgsc_calc_wdl
-SCRIPTDIR=${STUDYDIR}/test_${USER}
+STUDYDIR=/path/to/your/study                   ## Update this path prior to running!
+PIPEDIR=/path/to/your/pgsc_calc_wdl            ## Update this path prior to running!
+SCRIPTDIR=${STUDYDIR}/test_${USER}             
 CFGDIR=${SCRIPTDIR}/config
 mkdir -p ${CFGDIR}
 
-module load java
+module load java                               ##  Update tool paths or load commands prior to running!
 module load cromwell/83
-cromwell=/research/bsi/tools/biotools/cromwell/83
+cromwell=/path/to/cromwell/83
 
 ##  Create temp dir 
 TMPDIR=/tmp/${USER}/$$
