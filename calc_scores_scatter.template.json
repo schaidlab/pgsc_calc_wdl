@@ -1,5 +1,5 @@
 {
-    "calc_scores.scorefile": [
+    "calc_scores_scatter.scorefile": [
         "/full/path/location/pgscat_weight_00_allchr_additive_0.scorefile.gz",
         "/full/path/location/pgscat_weight_01_allchr_additive_0.scorefile.gz",
         "/full/path/location/pgscat_weight_02_allchr_additive_0.scorefile.gz",
