@@ -69,7 +69,7 @@ cd ${CFGDIR}
 ##     a. Update JSON files  
 ##     b. Run pgsc_calc_prepare_genomes
 
-nohup java -Dconfig.file=${CFGDIR}/slurmjps.conf -Djava.io.tmpdir=${TMPDIR} -jar ${cromwell}/cromwell-83.jar run ${PIPEDIR}/pgsc_calc_prepare_genomes.wdl --inputs ${CFGDIR}/pgsc_calc_prepare_genomes_2chr.json > prep_genome.${today}.log 2>&1 &
+nohup java -Dconfig.file=${CFGDIR}/slurm.conf -Djava.io.tmpdir=${TMPDIR} -jar ${cromwell}/cromwell-83.jar run ${PIPEDIR}/pgsc_calc_prepare_genomes.wdl --inputs ${CFGDIR}/pgsc_calc_prepare_genomes_2chr.json > prep_genome.${today}.log 2>&1 &
 
 
 ############
@@ -84,7 +84,7 @@ nohup java -Dconfig.file=${CFGDIR}/slurmjps.conf -Djava.io.tmpdir=${TMPDIR} -jar
 ##       iv. Submit jobs to generate PGS & perform ancestry-adjustment for each batch of scores
 ##
 
-nohup java -Dconfig.file=${CFGDIR}/slurmjps.conf -Djava.io.tmpdir=${TMPDIR} -jar  ${cromwell}/cromwell-83.jar run ${PIPEDIR}/calc_scores.wdl --inputs ${CFGDIR}/calc_scores_emerge.json > calc_scores.${today}.log 2>&1 &
+nohup java -Dconfig.file=${CFGDIR}/slurm.conf -Djava.io.tmpdir=${TMPDIR} -jar  ${cromwell}/cromwell-83.jar run ${PIPEDIR}/calc_scores.wdl --inputs ${CFGDIR}/calc_scores_emerge.json > calc_scores.${today}.log 2>&1 &
 
 
 
