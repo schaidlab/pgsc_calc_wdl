@@ -22,6 +22,7 @@ psam | Array of psam files
 ## calc_scores_scatter
 
 Calculate scores for a set of scorefiles, each containing multiple score models without using Nextflow. Use pgsc_calc_prepare_genomes first to generate files.
+Modified from calc_scores.wdl by Shannon McDonnell
 
 input | description
 --- | ---
@@ -43,13 +44,15 @@ overlap | TSV file with fraction of overlapping variants for each score
 
 Fit mean and variance models for each PG score. Return mean and variance coefficients for ancestry adjustment. 
 
+### ancestry_adjustment.R
+
+R functions used to fit ancestry models and perform ancestry adjustment (also utilized in adjust_scores.wdl)
 
 ## subset_score_file.wdl
 
+
 ## adjust_scores.wdl
 
-### ancestry_adjustment.R
 
-Written by Stephanie Gogarten. R functions to perform ancestry adjustment
 
 
