@@ -275,6 +275,9 @@ task compute_overlap {
             overlap[[p]] <- tibble(score=p, n_variants=nrow(vars), overlap=ov); \
         }; \
         overlap <- bind_rows(overlap); \
+        beta_all <- apply(score_vars[, -c(1:2)], 2, sum) \
+        beta_overlap <- apply((score_vars %>% filter(ID %in% overlap_vars) %>% dplyr::select(-ID, -effect_allele)), 2, sum) \
+        overlap <- overlap %>% mutate(beta_fraction = beta_overlap / beta_all) \
         write_tsv(overlap, 'score_overlap.tsv'); \
         "
     >>>
