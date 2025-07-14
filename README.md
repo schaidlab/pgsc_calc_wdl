@@ -1,66 +1,62 @@
-# Calculate raw & ancestry-adjusted scores for PRIMED legacy project (PRSMix)
 
-WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm on a high performance computing (HPC) environment. This repo builds off of [Stephanie Gogarten's calc_scores.wdl pipeline](https://github.com/UW-GAC/pgsc_calc_wdl/blob/main/README.md) which calculates scores without using Nextflow. All scripts were authored by Stephanie Gogarten unless otherwise notes. 
+## Purpose: Calculate raw & ancestry-adjusted scores for PRIMED legacy project (PRSMix)
 
-## Tool versions
-
-  - Java >= jdk 11.0
-  - Cromwell 83
-  - Plink2:   v2.00a.6LM.2023.1123
-  - Rscript   R-4.4.1
+WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm on a high performance computing (HPC) environment. This repo builds off of [Stephanie Gogarten's calc_scores.wdl pipeline](https://github.com/UW-GAC/pgsc_calc_wdl/blob/main/README.md) which calculates scores without using Nextflow. All
+ scripts were authored by Stephanie Gogarten unless otherwise notes. 
 
 
-## pgsc_calc_prepare_genomes
+# Steps at a high level for Slurm HPC, we offer these general steps
 
-Standalone workflow to convert VCF to pgen/pvar/psam.
+0. Pre-requisite files
+   A. Harmonized score files
+   B. Pre-calculate ancestry-adjusted PCs, save in txt file
+   C. File(s) of all sample variants (VCF or PGEN)
 
-input | description
---- | ---
-vcf | Array of VCF files
-merge_chroms | Boolean for whether to merge files to a single set of output files with all chromosomes
-snps_only | Boolean for whether to keep only SNPs in output
+1. Activate Tools and Scripts
+   A. Activate java (>17.0.1), plink(>=2.0.0), cromwell(>=83), Rscript (>= 4.2.0)
+   B. Clone git repo [SchaidLab repo](https://github.com/schaidlab/pgsc_calc_wdl)
 
-output description
---- | ---
-pgen | Array of pgen files
-pvar | Array of pvar files
-psam | Array of psam files
+2. Edit the config/slurm.example.config file specifying your local Slurm parameterization.
 
 
-## calc_scores_scatter
-
-Calculate scores for a set of scorefiles, each containing multiple score models without using Nextflow. Use pgsc_calc_prepare_genomes first to generate files.
-Modified from calc_scores.wdl by Shannon McDonnell
-
-input | description
---- | ---
-scorefile | Array containing multiple score files
-pgen | pgen file
-pvar | pvar file
-psam | psam file
-harmonize_scorefile | Boolean for whether to harmonize scorefile to consistent effect allele (default true)
-add_chr_prefix | Boolean for whether to add "chr" prefix to scorefile variant ids to match pvar (default true)
-
-output description
---- | ---
-scores | sscore file output by plink
-variants | variants included in sscore
-overlap | TSV file with fraction of overlapping variants for each score
- 
- 
-## fit_ancestry_model.wdl
-
-Fit mean and variance models for each PG score. Return mean and variance coefficients for ancestry adjustment. 
-
-### ancestry_adjustment.R
-
-R functions used to fit ancestry models and perform ancestry adjustment (also utilized in adjust_scores.wdl)
-
-## subset_score_file.wdl
+3. If chromosome-specific VCF files:
+   A. Edit the config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
+   B. Run the prepare_genomes.wdl script
 
 
-## adjust_scores.wdl
+4. Run calc_scores_scatter
+   A. Edit the config/calc_scores_scatter.template.json file with the processed psam/pvar files
+   B. Run the calc_scores_scatter.wdl script
 
 
+# Expanded Details for editing json and configure files.
 
+
+## 2. Editing the slurm.conf file
+-- User will need to modify:
+      a. root (where cromwell will run, line 9)
+      b. Queue name (line 12)
+      c. You may need to update --time depending your queue maxtime (sinfo will show partitions available on your system). (line 23)
+      d. Confirm slurm mail-type used by your institution (line 24)
+      e. User e-mail (line 25)
+
+## 3. Editing config/pgsc_calc_prepare_genomes.template.json
+-- User will need to modify:
+      a. path to plink on system
+      b. full path and file name to vcf file(s). Typically these are split by chromosome, in which case a comma-separated list of vcf files is needed. 
+      c. optional, other parameter settings for memory and cpus.
+
+
+##  4. Updating the calc_scores_scatter.template.json file
+
+-- User will need to modify:
+   a. score file locations
+   b. path to projection PCs for your samples
+   c. pgen/psam/pvar file locations
+   d. aggregate_results.prefix
+   e. adjust_script path
+   f. aggregate_script path
+   g. RSCRIPT path
+   h. PLINK2 path
+   
 

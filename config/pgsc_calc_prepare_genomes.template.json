@@ -1,0 +1,14 @@
+{
+    "pgsc_calc_prepare_genomes.vcf" : [
+        "/full/path/to/chrom1.genotypes.vcf.bgz",
+        "/full/path/to/chrom2.genotypes.vcf.bgz",
+        "/full/path/to/chrom22.genotypes.vcf.bgz"
+    ],
+    "pgsc_calc_prepare_genomes.merge_chroms" : true,
+    "pgsc_calc_prepare_genomes.snps_only" : true,
+    "pgsc_calc_prepare_genomes.prepare_genomes.mem_gb": 16,
+    "pgsc_calc_prepare_genomes.merge_files.mem_gb": 16,
+    "pgsc_calc_prepare_genomes.prepare_genomes.cpu": 2,
+    "pgsc_calc_prepare_genomes.PLINK2": "/full/path/to/plink/executable/plink2"
+
+}

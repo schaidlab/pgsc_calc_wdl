@@ -1,0 +1,27 @@
+{
+    "calc_scores_scatter.scorefile": [
+        "/path/to/downloaded/scorefiles/pgscat_weight_00_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_01_allchr_additive_0.scorefile.gz"
+    ],
+    "calc_scores_scatter.pgen": "/path/to/merged_files/from_prepare_genomes/call-merge_files/execution/merged.pgen",
+    "calc_scores_scatter.psam": "/path/to/merged_files/from_prepare_genomes/call-merge_files/execution/merged.psam",
+    "calc_scores_scatter.pvar": "/path/to/merged_files/from_prepare_genomes/call-merge_files/execution/merged.pvar",
+    "calc_scores_scatter.pcs": "/path/to/pre_calculated_pca_projection/data/projections_no_weird.txt",
+    "calc_scores_scatter.adjust_scores.mem_gb": 8,
+    "calc_scores_scatter.plink_score.mem_gb": 6,
+    "calc_scores_scatter.plink_score.cpu": 8,
+    "calc_scores_scatter.harmonize_scorefile": false,
+    "calc_scores_scatter.fit_ancestry_model.mem_gb": 4,
+    "calc_scores_scatter.ancestry_adjust": true,
+    "calc_scores_scatter.subset_variants": null,
+    "calc_scores_scatter.compute_overlap.mem_gb": 64,
+    "calc_scores_scatter.subset_scorefile.mem_gb": 64,
+    "calc_scores_scatter.add_chr_prefix": false,
+    "calc_scores_scatter.adjust_script": "/path/to/git_repo/pgsc_calc_wdl/ancestry_adjustment.R",
+    "calc_scores_scatter.aggregate_script": "/path/to/git_repo/pgsc_calc_wdl/aggregate_scores.R",
+    "calc_scores_scatter.aggregate_results.mem_gb": 20,
+    "calc_scores_scatter.aggregate_results.prefix": "<my_cohort>",
+    "calc_scores_scatter.RSCRIPT": "/path/to/r_install/R-4.4.1/bin/Rscript",
+    "calc_scores_scatter.PLINK2": "/path/to/plink2_install/plink2"
+}
+
