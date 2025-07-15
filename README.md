@@ -32,7 +32,7 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 # Expanded Details for editing json and configure files.
 
 
-## 2. Editing the slurm.conf file
+## 2. Editing the config/slurm.template.conf file
 -- User will need to modify:
 
       a. root (where cromwell will run, line 9)
@@ -44,22 +44,22 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 ## 3. Editing config/pgsc_calc_prepare_genomes.template.json
 -- User will need to modify:
 
-      a. path to plink on system
-      b. full path and file name to vcf file(s). Typically these are split by chromosome, in which case a comma-separated list of vcf files is needed. 
+      a. path to plink on your system
+      b. full path and file name of vcf file(s). Typically these are split by chromosome, in which case a comma-separated list of vcf files is needed. 
       c. optional, other parameter settings for memory and cpus.
 
 
-##  4. Updating the calc_scores_scatter.template.json file
+##  4. Updating the config/calc_scores_scatter.template.json file
 
 -- User will need to modify:
 
 	a. score file locations
 	b. path to projection PCs for your samples
 	c. pgen/psam/pvar file locations
-	d. aggregate_results.prefix
-	e. adjust_script path
-	f. aggregate_script path
-	g. RSCRIPT path
-	h. PLINK2 path
+	d. aggregate_results.prefix to your desired output file names
+	e. adjust_script path (this will be located in the cloned repo /pipe/ folder)
+	f. aggregate_script path (this will be located in the cloned repo /pipe/ folder)
+	g. RSCRIPT path on your system
+	h. PLINK2 path on your system
    
 
