@@ -14,7 +14,7 @@
 ##        git clone https://github.com/schaidlab/pgsc_calc_wdl
 ##
 ##  1. Update a slurm.conf configuration file specifying your local Slurm parameterization
-##     -- See **slurm.template.conf** file as an example. See the README section for more details
+##     -- See **/config/slurm.template.conf** file as an example. See the README.md section for more details
 ##
 ##  2. Update the config/prepare_genomes.template.json file to have run-time settings,
 ##     executables to plink, and location of vcf files
