@@ -119,7 +119,8 @@ workflow calc_scores_scatter {
     }
      
     output {
-        File? aggregate_scores = select_first([aggregate_results.aggregate_raw, scores])
+        File? aggregate_scores_avg = select_first([aggregate_results.aggregate_raw_avg, scores])
+	File? aggregate_scores_sum = select_first([aggregate_results.aggregate_raw_sum, scores])
         File? aggregate_adjusted_scores = aggregate_results.aggregate_adjusted
         File? score_overlap = select_first([aggregate_results.aggregate_overlap, overlaps])
     }
