@@ -267,7 +267,6 @@ task compute_overlap {
         score_vars <- read_tsv('~{scorefile}'); \
         overlap_vars <- readLines('~{variants}'); \
         names(score_vars)[1] <- 'ID'; \
-        #pgs <- names(score_vars)[str_detect(names(score_vars), '^PGS')]; \
         pgs <- names(score_vars)[-c(1:2)]; \
         overlap <- list(); \
         for (p in pgs) { \
@@ -316,7 +315,8 @@ task aggregate_results {
     >>>
 
     output {
-        File aggregate_raw = "~{prefix}_raw_scores.tsv"
+        File aggregate_raw_avg = "~{prefix}_raw_avg_scores.tsv"
+        File aggregate_raw_sum = "~{prefix}_raw_sum_scores.tsv"
         File aggregate_adjusted = "~{prefix}_adjusted_scores.tsv"
         File aggregate_overlap = "~{prefix}_overlap.tsv"
     }
