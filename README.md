@@ -7,10 +7,10 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 # General steps to run on Slurm HPC 
 
-0. Pre-requisite files
-  - Harmonized score files
-  - Pre-calculate ancestry-adjusted PCs, save in txt file
-  - File(s) of all sample variants (VCF or PGEN)
+1. Pre-requisite files
+   1. Harmonized score files
+   2. Pre-calculate ancestry-adjusted PCs, save in txt file
+   3. File(s) of all sample variants (VCF or PGEN)
 
 1. Activate Tools and Scripts
   - Activate java (>17.0.1), plink(>=2.0.0), cromwell(>=83), Rscript (>= 4.2.0)
