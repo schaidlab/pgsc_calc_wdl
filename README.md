@@ -30,7 +30,7 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 # Expanded Details for editing json and configure files.
 
 
-## 3. Updating the config/slurm.template.conf file
+## 3. Updating the /config/slurm.template.conf file
 User will need to modify:
 1. root (where cromwell will run and pipeline output will be located, line 9)
 2. Queue name (line 12)
@@ -38,7 +38,6 @@ User will need to modify:
    - Mayo test run for eMERGE (100k subjects) utilized these memory thresholds: 
 	   - "calc_scores_scatter.adjust_scores.mem_gb": 8,
 	   - "calc_scores_scatter.plink_score.mem_gb": 6,
-	   - "calc_scores_scatter.plink_score.cpu": 8,
 	   - "calc_scores_scatter.fit_ancestry_model.mem_gb": 4,
 	   - "calc_scores_scatter.compute_overlap.mem_gb": 64,
 	   - "calc_scores_scatter.subset_scorefile.mem_gb": 64,
