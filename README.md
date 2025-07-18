@@ -54,13 +54,19 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 -- User will need to modify:
 
-	a. score file locations
-	b. path to projection PCs for your samples
-	c. pgen/psam/pvar file locations
-	d. aggregate_results.prefix to your desired output file names
-	e. adjust_script path (this will be located in the cloned repo /pipe/ folder)
-	f. aggregate_script path (this will be located in the cloned repo /pipe/ folder)
-	g. RSCRIPT path on your system
-	h. PLINK2 path on your system
-   
+	Data parameters:
+ 
+		a. score file locations (harmonized files from Anvil)
+		b. path to projection PCs for your samples 
+		c. pgen/psam/pvar file locations (output from pgsc_calc_prepare_genomes)
+	
+ 	Tool paths: 
+	
+  		g. RSCRIPT path on your system
+		h. PLINK2 path on your system
+		  adjust_script path (this will be located in the cloned repo /pipe/ folder)
+		f. aggregate_script path (this will be located in the cloned repo /pipe/ folder)
+  	
+   	d. aggregate_results.prefix to your desired output file names (suggest using PRIMED cohort name, e.g., eMERGE)
+	 
 
