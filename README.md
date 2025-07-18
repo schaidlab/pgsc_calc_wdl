@@ -12,29 +12,28 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
    2. Pre-calculate ancestry-adjusted PCs, save in txt file
    3. File(s) of all sample variants (VCF or PGEN)
 
-1. Activate Tools and Scripts
-  - Activate java (>17.0.1), plink(>=2.0.0), cromwell(>=83), Rscript (>= 4.2.0)
-  - Clone git repo [SchaidLab repo](https://github.com/schaidlab/pgsc_calc_wdl)
+2. Activate Tools and Scripts
+   1. Activate java (>17.0.1), plink(>=2.0.0), cromwell(>=83), Rscript (>= 4.2.0)
+   2. Clone git repo [SchaidLab repo](https://github.com/schaidlab/pgsc_calc_wdl)
 
-2. Edit the config/slurm.example.config file specifying your local Slurm parameterization.
+3. Edit the config/slurm.example.config file specifying your local Slurm parameterization.
 
-3. Run pgsc_calc_prepare_genomes.wdl (if chromosome-specific VCF files):
-- Edit the config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
-- Run the prepare_genomes.wdl script
+4. Run pgsc_calc_prepare_genomes.wdl (if chromosome-specific VCF files):
+   1. Edit the config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
+   2. Run the prepare_genomes.wdl script
 
-4. Run calc_scores_scatter
-- Edit the config/calc_scores_scatter.template.json file with the processed psam/pvar files
-- Run the calc_scores_scatter.wdl script
+5. Run calc_scores_scatter
+   1. Edit the config/calc_scores_scatter.template.json file with the processed psam/pvar files
+   2. Run the calc_scores_scatter.wdl script
 
 
 # Expanded Details for editing json and configure files.
 
 
-## 2. Editing the config/slurm.template.conf file
+## 3. Editing the config/slurm.template.conf file
 -- User will need to modify:
-
-      a. root (where cromwell will run and pipeline output will be located, line 9)
-      b. Queue name (line 12)
+	- root (where cromwell will run and pipeline output will be located, line 9)
+	- Queue name (line 12)
       c. You may need to update --time depending on your queue maxtime (sinfo will show partitions available on your system). (line 23)
       		- <<Insert time estimates from Mayo runs for each step>>
       d. Confirm slurm mail-type used by your institution (line 24, e.g., BEGIN, END, FAIL). This dictates when you will receive e-mails for each grid job. 
