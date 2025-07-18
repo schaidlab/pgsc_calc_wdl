@@ -30,22 +30,29 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 # Expanded Details for editing json and configure files.
 
 
-## 3. Editing the config/slurm.template.conf file
+## 3. Updating the config/slurm.template.conf file
 User will need to modify:
 1. root (where cromwell will run and pipeline output will be located, line 9)
 2. Queue name (line 12)
-3. You may need to update --time depending on your queue maxtime (sinfo will show partitions available on your system). (line 23)
+3. You may need to update the time grid parameter (`--time`) depending on your queue maxtime (sinfo will show partitions and time limits available on your system). (line 23)
    - Mayo test run for eMERGE (100k subjects) utilized these memory thresholds: 
-4. Confirm slurm mail-type used by your institution (line 24, e.g., BEGIN, END, FAIL). This dictates when you will receive e-mails for each grid job. 
+	   - "calc_scores_scatter.adjust_scores.mem_gb": 8,
+	   - "calc_scores_scatter.plink_score.mem_gb": 6,
+	   - "calc_scores_scatter.plink_score.cpu": 8,
+	   - "calc_scores_scatter.fit_ancestry_model.mem_gb": 4,
+	   - "calc_scores_scatter.compute_overlap.mem_gb": 64,
+	   - "calc_scores_scatter.subset_scorefile.mem_gb": 64,
+	   - "calc_scores_scatter.aggregate_results.mem_gb": 20,
+4. Confirm slurm mail-type options used by your institution (line 24, e.g., BEGIN, END, FAIL). This dictates when you will receive e-mails for each grid job. 
 5. User e-mail (line 25)
 
-## 3. Editing config/pgsc_calc_prepare_genomes.template.json
+## 4. Updating the /config/pgsc_calc_prepare_genomes.template.json
 User will need to modify:
 1. path to plink2 executable on your system
 2. full path and file name of vcf file(s). Typically these are split by chromosome, in which case a comma-separated list of vcf files is needed. 
 3. optional, other parameter settings for memory and cpus.
 
-##  4. Updating the config/calc_scores_scatter.template.json file
+## 5. Updating the /config/calc_scores_scatter.template.json file
 User will need to modify:
 1. Data parameters:
    - score file locations (harmonized files from Anvil)
@@ -63,9 +70,9 @@ User will need to modify:
 
 3. Other parameters:
    - aggregate_results.prefix: Prefix string used to name final output files (suggest using PRIMED cohort name, e.g., eMERGE)
-   - harmonize_scorefile: false (ANVIL score files have already been harmonized)
-   - ancestry_adjust: true 
-   - add_chr_prefix: false (ANVIL harmonized score files do not contain 'chr' prefix, so set to false)
+   - harmonize_scorefile: `false` (ANVIL score files have already been harmonized)
+   - ancestry_adjust: `true`
+   - add_chr_prefix: `false` (ANVIL harmonized score files do not contain 'chr' prefix, so set to false)
    
 	 
 
