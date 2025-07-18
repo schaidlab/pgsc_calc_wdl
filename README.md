@@ -31,10 +31,10 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 
 ## 3. Editing the config/slurm.template.conf file
--- User will need to modify:
-	- root (where cromwell will run and pipeline output will be located, line 9)
-	- Queue name (line 12)
-      c. You may need to update --time depending on your queue maxtime (sinfo will show partitions available on your system). (line 23)
+User will need to modify:
+1. root (where cromwell will run and pipeline output will be located, line 9)
+2. Queue name (line 12)
+3. You may need to update --time depending on your queue maxtime (sinfo will show partitions available on your system). (line 23)
       		- <<Insert time estimates from Mayo runs for each step>>
       d. Confirm slurm mail-type used by your institution (line 24, e.g., BEGIN, END, FAIL). This dictates when you will receive e-mails for each grid job. 
       e. User e-mail (line 25)
