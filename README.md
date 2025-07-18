@@ -8,27 +8,23 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 # General steps to run on Slurm HPC 
 
 0. Pre-requisite files
-   
-	A. Harmonized score files
-	B. Pre-calculate ancestry-adjusted PCs, save in txt file
-	C. File(s) of all sample variants (VCF or PGEN)
+- Harmonized score files
+- Pre-calculate ancestry-adjusted PCs, save in txt file
+- File(s) of all sample variants (VCF or PGEN)
 
 1. Activate Tools and Scripts
-   
-   A. Activate java (>17.0.1), plink(>=2.0.0), cromwell(>=83), Rscript (>= 4.2.0)
-   B. Clone git repo [SchaidLab repo](https://github.com/schaidlab/pgsc_calc_wdl)
+ - Activate java (>17.0.1), plink(>=2.0.0), cromwell(>=83), Rscript (>= 4.2.0)
+ - Clone git repo [SchaidLab repo](https://github.com/schaidlab/pgsc_calc_wdl)
 
 2. Edit the config/slurm.example.config file specifying your local Slurm parameterization.
 
-
-3. If chromosome-specific VCF files:
-   A. Edit the config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
-   B. Run the prepare_genomes.wdl script
-
+3. Run pgsc_calc_prepare_genomes.wdl (if chromosome-specific VCF files):
+- Edit the config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
+- Run the prepare_genomes.wdl script
 
 4. Run calc_scores_scatter
-   A. Edit the config/calc_scores_scatter.template.json file with the processed psam/pvar files
-   B. Run the calc_scores_scatter.wdl script
+- Edit the config/calc_scores_scatter.template.json file with the processed psam/pvar files
+- Run the calc_scores_scatter.wdl script
 
 
 # Expanded Details for editing json and configure files.
