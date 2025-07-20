@@ -272,8 +272,8 @@ task compute_overlap {
         overlap <- list(); \
         for (p in pgs) { \
             vars <- select(score_vars, ID, weight=!!p); \
-            vars0 <- filter(vars, weight != 0); \
-            ov <- sum(is.element(vars0[['ID']], overlap_vars))/nrow(vars0); \
+            vars <- filter(vars, weight != 0); \
+            ov <- sum(is.element(vars[['ID']], overlap_vars))/nrow(vars); \
             b_all <- sum(vars[['weight']]^2)
             b_overlap <- sum(filter(vars, is.element(ID, overlap_vars))[['weight']]^2)
             overlap[[p]] <- tibble(score=p, n_variants=nrow(vars), overlap=ov, beta_fraction = b_overlap/b_all); \
