@@ -20,14 +20,17 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 4. Run pgsc_calc_prepare_genomes pipeline (if chromosome-specific VCF files):
    1. Edit the /config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
-   2. Run the /pipe/pgsc_calc_prepare_genomes.wdl pipeline 
-
+   2. Run the /pipe/pgsc_calc_prepare_genomes.wdl pipeline. 
+	  i. A bash script (prep_genomes.sh) configures tools and submits the WDL pipeline 
+	  ii. See submit_prep_genomes.sh for an example utilizing prep_genomes.sh to submit the pipeline
+	  
 5. Run calc_scores_scatter pipeline
    1. Edit the /config/calc_scores_scatter.template.json file (See expanded notes in section 5.)
-   2. Run the calc_scores_scatter.wdl script. See run_calc_scores.sh for example submission script. 
+   2. Run the calc_scores_scatter.wdl script. See submit_calc_scores.sh for example submission script. 
+	  i. A bash script (calc_scores.sh) configures tools and submits the WDL pipeline
+	  ii. See submit_calc_scores.sh for an example utilizing calc_scores.sh to submit the pipeline 
 
-
-# Expanded Details for editing json and configure files.
+# Expanded Details 
 
 
 ## 3. Updating the /config/slurm.template.conf file
@@ -45,11 +48,24 @@ User will need to modify:
 4. Confirm slurm mail-type options used by your institution (line 24, e.g., BEGIN, END, FAIL). This dictates when you will receive e-mails for each grid job. 
 5. User e-mail (line 25)
 
-## 4. Updating the /config/pgsc_calc_prepare_genomes.template.json
+## 4. Run pgsc_calc_prepare_genomes pipeline
+
+###  a. Updating the /config/pgsc_calc_prepare_genomes.template.json
+ 
 User will need to modify:
 1. path to plink2 executable on your system
 2. full path and file name of vcf file(s). Typically these are split by chromosome, in which case a comma-separated list of vcf files is needed. 
 3. optional, other parameter settings for memory and cpus.
+
+###  b. Submit pipeline (via submit_prep_genomes.sh)
+
+User will need to:
+1. Update Slurm queue name in prep_genomes.sh:  `#SBATCH -p cpu-short`
+2. Follow directions in submit_prep_genomes.sh to update repo location and config files
+3. Save both updated scripts (prep_genomes.sh and submit_prep_genomes.sh) 
+4. Run submit_prep_genomes.sh:
+   ./submit_prep_genomes.sh 
+   
 
 ## 5. Updating the /config/calc_scores_scatter.template.json file
 User will need to modify:
