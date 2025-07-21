@@ -21,14 +21,14 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 4. Run pgsc_calc_prepare_genomes pipeline (if chromosome-specific VCF files):
    1. Edit the /config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
    2. Run the /pipe/pgsc_calc_prepare_genomes.wdl pipeline. 
-	  i. A bash script (prep_genomes.sh) configures tools and submits the WDL pipeline 
-	  ii. See submit_prep_genomes.sh for an example utilizing prep_genomes.sh to submit the pipeline
+   		i. A bash script (prep_genomes.sh) configures tools and submits the WDL pipeline 
+		ii. See submit_prep_genomes.sh for an example utilizing prep_genomes.sh to submit the pipeline
 	  
 5. Run calc_scores_scatter pipeline
    1. Edit the /config/calc_scores_scatter.template.json file (See expanded notes in section 5.)
    2. Run the calc_scores_scatter.wdl script. See submit_calc_scores.sh for example submission script. 
-	  i. A bash script (calc_scores.sh) configures tools and submits the WDL pipeline
-	  ii. See submit_calc_scores.sh for an example utilizing calc_scores.sh to submit the pipeline 
+		i. A bash script (calc_scores.sh) configures tools and submits the WDL pipeline
+		ii. See submit_calc_scores.sh for an example utilizing calc_scores.sh to submit the pipeline 
 
 # Expanded Details 
 
