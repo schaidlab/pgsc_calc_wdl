@@ -23,6 +23,7 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
    2. Run the /pipe/pgsc_calc_prepare_genomes.wdl pipeline. 
    
 		a. A bash script (prep_genomes.sh) configures tools and submits the WDL pipeline
+		
 		b. See submit_prep_genomes.sh for an example utilizing prep_genomes.sh to submit the pipeline
 	  
 5. Run calc_scores_scatter pipeline
@@ -30,6 +31,7 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
    2. Run the calc_scores_scatter.wdl script. See submit_calc_scores.sh for example submission script. 
 
 		a. A bash script (calc_scores.sh) configures tools and submits the WDL pipeline
+		
 		b. See submit_calc_scores.sh for an example utilizing calc_scores.sh to submit the pipeline 
 
 # Expanded Details 
@@ -38,21 +40,14 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 ## 3. Updating the /config/slurm.template.conf file
 User will need to modify:
 1. root (where cromwell will run and pipeline output will be located, line 9)
-2. Queue name (line 12)
-3. You may need to update the time grid parameter (`--time`) depending on your queue maxtime (sinfo will show partitions and time limits available on your system). (line 23)
-   - Mayo test run for eMERGE (100k subjects) utilized these memory thresholds: 
-	   - "calc_scores_scatter.adjust_scores.mem_gb": 8,
-	   - "calc_scores_scatter.plink_score.mem_gb": 6,
-	   - "calc_scores_scatter.fit_ancestry_model.mem_gb": 4,
-	   - "calc_scores_scatter.compute_overlap.mem_gb": 64,
-	   - "calc_scores_scatter.subset_scorefile.mem_gb": 64,
-	   - "calc_scores_scatter.aggregate_results.mem_gb": 20,
+2. Queue name (line 12). The `sinfo` command can be used to see available queue names. 
+3. You may need to update the time grid parameter (`--time`) depending on your queue maxtime (`sinfo` will show partitions and time limits available on your system). (line 23)
 4. Confirm slurm mail-type options used by your institution (line 24, e.g., BEGIN, END, FAIL). This dictates when you will receive e-mails for each grid job. 
 5. User e-mail (line 25)
 
-## 4. Run pgsc_calc_prepare_genomes pipeline
+## 4. Run pgsc_calc_prepare_genomes WDL pipeline
 
-###  a. Updating the /config/pgsc_calc_prepare_genomes.template.json
+###  a. Update the /config/pgsc_calc_prepare_genomes.template.json
  
 User will need to modify:
 1. path to plink2 executable on your system
@@ -62,14 +57,17 @@ User will need to modify:
 ###  b. Submit pipeline (via submit_prep_genomes.sh)
 
 User will need to:
-1. Update Slurm queue name in prep_genomes.sh:  `#SBATCH -p cpu-short`
+1. Update Slurm queue name in prep_genomes.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`.  
 2. Follow directions in submit_prep_genomes.sh to update repo location and config files
 3. Save both updated scripts (prep_genomes.sh and submit_prep_genomes.sh) 
-4. Run submit_prep_genomes.sh:
+4. Run submit_prep_genomes.sh by submitting this line in a linux shell:
    ./submit_prep_genomes.sh 
    
 
-## 5. Updating the /config/calc_scores_scatter.template.json file
+## 5. Run calc_score_scatter WDL pipeline
+
+###  a. Update the /config/calc_scores_scatter.template.json file
+
 User will need to modify:
 1. Data parameters:
    - score file locations (harmonized files from Anvil)
@@ -91,5 +89,13 @@ User will need to modify:
    - ancestry_adjust: `true`
    - add_chr_prefix: `false` (ANVIL harmonized score files do not contain 'chr' prefix, so set to false)
    
-	 
+###  b. Submit pipeline (via submit_calc_scores.sh)
+
+User will need to:
+1. Update Slurm queue name in calc_scores.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`.  
+2. Follow directions in submit_calc_scores.sh to update repo location and config files
+3. Save both updated scripts (calc_scores.sh and submit_calc_scores.sh) 
+4. Run submit_calc_genomes.sh by submitting this line in a linux shell:
+   ./submit_calc_genomes.sh 
+   
 
