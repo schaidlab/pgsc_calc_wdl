@@ -8,7 +8,7 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 # General steps to run on Slurm HPC 
 
 1. Pre-requisite files
-   1. Harmonized score files (download from AnVil)
+   1. Harmonized score files (download from AnVIL)
    2. Pre-calculate ancestry-adjusted PCs, save in txt file
    3. Sample genotype files (VCF or PGEN)
 
@@ -97,7 +97,7 @@ User will need to:
 
 User will need to modify:
 1. Data parameters:
-   - score file locations (harmonized files from Anvil)
+   - score file locations (harmonized files from AnVIL)
    - path to projection PCs for your samples 
    - pgen/psam/pvar file locations: 
 	   - The merged PGEN files will be located in the output from the pgsc_calc_prepare_genomes pipeline, i.e., /`root`/pgsc_calc_prepare_genomes/`random_string`/call-merge_files/execution/merged.[pvar/pgen/psam])
