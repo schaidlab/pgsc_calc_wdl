@@ -2,7 +2,7 @@
 ## Purpose: Calculate raw & ancestry-adjusted scores for PRIMED legacy project (PRSMix)
 
 WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm on a high performance computing (HPC) environment. This repo builds off of [Stephanie Gogarten's calc_scores.wdl pipeline](https://github.com/UW-GAC/pgsc_calc_wdl/blob/main/README.md) which calculates scores without using Nextflow. All
- scripts were authored by Stephanie Gogarten unless otherwise notes. 
+ scripts were authored by Stephanie Gogarten unless otherwise noted. 
 
 
 # General steps to run on Slurm HPC 
