@@ -18,7 +18,7 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 3. Edit the /config/slurm.example.config file specifying your local Slurm parameterization.
 
-4. Run *pgsc_calc_prepare_genomes* pipeline 
+4. Run **pgsc_calc_prepare_genomes** pipeline 
 	Standalone workflow to convert VCF to pgen/pvar/psam. 
 
 input | description
@@ -33,23 +33,31 @@ pgen | Array of pgen files
 pvar | Array of pvar files
 psam | Array of psam files
 
-	Steps to run: 
-	
-   1. Edit the /config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
-   2. Run the /pipe/pgsc_calc_prepare_genomes.wdl pipeline. 
-   
-		a. A bash script (prep_genomes.sh) configures tools and submits the WDL pipeline
-		
-		b. See submit_prep_genomes.sh for an example utilizing prep_genomes.sh to submit the pipeline
+5. Run **calc_scores_scatter** pipeline
+	Calculate scores and perform ancestry adjustment without using Nextflow. Use pgsc_calc_prepare_genomes first to generate files.
 
+input | description
+--- | ---
+scorefile | Array of harmonized score files
+pgen | full-genome pgen file
+pvar | full-genome pvar file
+psam | full-genome psam file
+pcs  | projected PCs 
+harmonize_scorefile | Boolean for whether to harmonize scorefile to consistent effect allele (default true)
+ancestry_adjust | Boolean for whether to perform ancestry adjustment (default true)
+add_chr_prefix | Boolean for whether to add "chr" prefix to scorefile variant ids to match pvar (default false)
+PLINK2 | Full path to plink2 executable
+RSCRIPT | Full path to RSCRIPT executable
+adjust_script | path to ancestry_adjustment.R script on local system
+aggregate_script | path to aggregate_scores.R script on local system
+aggregate_results.prefix | Prefix used to name all aggregated output files 
 
-5. Run calc_scores_scatter pipeline
-   1. Edit the /config/calc_scores_scatter.template.json file (See expanded notes in section 5.)
-   2. Run the calc_scores_scatter.wdl script. See submit_calc_scores.sh for example submission script. 
-
-		a. A bash script (calc_scores.sh) configures tools and submits the WDL pipeline
-		
-		b. See submit_calc_scores.sh for an example utilizing calc_scores.sh to submit the pipeline 
+output | description
+--- | ---
+{prefix}_adjusted_scores.tsv | TSV file containing all ancestry adjusted scores aggregated across all harmonized score files
+{prefix}_raw_sum_scores.tsv | TSV file containing all raw SUM PRS aggregated across all harmonized score files
+{prefix}_raw_avg_scores.tsv | TSV file containing all raw AVG PRS aggregated across all harmonized score files
+{prefix}_overlap.tsv | TSV file containing overlap metrics for all PRS
 
 # Expanded Details 
 
