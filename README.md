@@ -18,14 +18,31 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 3. Edit the /config/slurm.example.config file specifying your local Slurm parameterization.
 
-4. Run pgsc_calc_prepare_genomes pipeline (if chromosome-specific VCF files):
+4. Run pgsc_calc_prepare_genomes pipeline 
+	Standalone workflow to convert VCF to pgen/pvar/psam. 
+
+input | description
+--- | ---
+vcf | Array of VCF files
+merge_chroms | Boolean for whether to merge files to a single set of output files with all chromosomes
+snps_only | Boolean for whether to keep only SNPs in output
+
+output | description
+--- | ---
+pgen | Array of pgen files
+pvar | Array of pvar files
+psam | Array of psam files
+
+	Steps to run: 
+	
    1. Edit the /config/prepare_genomes.template.json file to have run-time settings, executables to plink, and location of vcf file(s)
    2. Run the /pipe/pgsc_calc_prepare_genomes.wdl pipeline. 
    
 		a. A bash script (prep_genomes.sh) configures tools and submits the WDL pipeline
 		
 		b. See submit_prep_genomes.sh for an example utilizing prep_genomes.sh to submit the pipeline
-	  
+
+
 5. Run calc_scores_scatter pipeline
    1. Edit the /config/calc_scores_scatter.template.json file (See expanded notes in section 5.)
    2. Run the calc_scores_scatter.wdl script. See submit_calc_scores.sh for example submission script. 
@@ -54,10 +71,12 @@ User will need to modify:
 2. full path and file name of vcf file(s). Typically these are split by chromosome, in which case a comma-separated list of vcf files is needed. 
 3. optional, other parameter settings for memory and cpus.
 
-###  b. Submit pipeline (via submit_prep_genomes.sh)
+###  b. Submit pipeline 
 
 User will need to:
-1. Update Slurm queue name in prep_genomes.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`.  
+1. Update Slurm queue name in prep_genomes.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`. 
+	- To submit directly to Slurm queue:
+	sbatch --mail-user=<EMAIL.ADDRESS> --mail-type=FAIL prep_genomes.sh <<PIPELINE_DIR>> <<SLURM_CONFIG>> <<
 2. Follow directions in submit_prep_genomes.sh to update repo location and config files
 3. Save both updated scripts (prep_genomes.sh and submit_prep_genomes.sh) 
 4. Run submit_prep_genomes.sh by submitting this line in a linux shell:
