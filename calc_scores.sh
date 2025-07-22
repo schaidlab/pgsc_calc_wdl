@@ -78,7 +78,16 @@ export cromwellbin cromwellpath today
 if [ -z "$SLURM_JOB_ID" ];  then
     echo "Submitting calc_scores_scatter.wdl on interactive node"
 
-    mkdir -p ${TMPDIR}
+    # Create tmpdir if not existing
+    : "${TMPDIR:=/tmp/${USER}/$$}"
+    
+    if [ ! -d "${TMPDIR}" ]; then
+	mkdir -p ${TMPDIR}
+    fi
+
+    # Set trap to clean up on exit
+    trap "rm -rf ${TMPDIR}" EXIT
+    
     nohup java -Dconfig.file=${SLURMCFG} -Djava.io.tmpdir=${TMPDIR} -jar  ${cromwellpath}/cromwell-83.jar run ${PIPEDIR}/pipe/calc_scores_scatter.wdl --inputs ${WDLCFG} > calc_scores.${today}.log 2>&1 &
 
 else

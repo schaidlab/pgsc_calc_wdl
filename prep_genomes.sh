@@ -78,7 +78,16 @@ export cromwellbin cromwellpath today
 if [ -z "$SLURM_JOB_ID" ];  then
     echo "Submitting pgsc_calc_prepare_genomics.wdl on interactive node"
 
-    mkdir -p ${TMPDIR}
+    # Create tmpdir if not existing
+    : "${TMPDIR:=/tmp/${USER}/$$}"
+
+    if [ ! -d "${TMPDIR}" ]; then
+	mkdir -p ${TMPDIR}
+    fi
+    
+    # Set trap to clean up on exit
+    trap "rm -rf ${TMPDIR}" EXIT
+    
     nohup java -Dconfig.file=${SLURMCFG} -Djava.io.tmpdir=${TMPDIR} -jar  ${cromwellpath}/cromwell-83.jar run ${PIPEDIR}/pipe/pgsc_calc_prepare_genomes.wdl --inputs ${WDLCFG} > prep_genomes.${today}.log 2>&1 &
 
 else

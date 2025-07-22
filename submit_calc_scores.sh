@@ -22,7 +22,7 @@ EMAIL=    ##  Fill in your e-mail address for Slurm notifications
 sbatch --mail-user=${EMAIL} --mail-type=END,FAIL ${PIPEDIR}/calc_scores.sh ${PIPEDIR} ${SLURMCFG} ${WDLCFG} 
 
 
-## Optionally, the script can be submitted on an interacive node instead using this syntax
+## Optionally, the script can be submitted on an interactive node instead using this syntax
 ## To submit in this manner, comment out the 'sbatch' command above and uncomment this line, save & run this script: 
 ## nohup /bin/bash ${PIPEDIR}/calc_scores.sh ${SLCFG} ${CSCFG} ${TMPDIR} > calc_scores.${today}.log 2>&1 &
 
