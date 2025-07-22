@@ -18,7 +18,7 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 3. Edit the /config/slurm.example.config file specifying your local Slurm parameterization.
 
-4. Run pgsc_calc_prepare_genomes pipeline 
+4. Run *pgsc_calc_prepare_genomes* pipeline 
 	Standalone workflow to convert VCF to pgen/pvar/psam. 
 
 input | description
