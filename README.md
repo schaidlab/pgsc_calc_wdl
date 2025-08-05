@@ -112,7 +112,7 @@ User will need to modify:
 
 3. Other parameters:
    - aggregate_results.prefix: Prefix string used to name final output files (suggest using PRIMED cohort name, e.g., eMERGE)
-   - harmonize_scorefile: `false` (ANVIL score files have already been harmonized)
+   - harmonize_scorefile: `true` (ANVIL score files need to be harmonized)
    - ancestry_adjust: `true`
    - add_chr_prefix: `false` (ANVIL harmonized score files do not contain 'chr' prefix, so set to false)
    
