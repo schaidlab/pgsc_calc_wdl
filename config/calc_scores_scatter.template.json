@@ -20,7 +20,7 @@
     "calc_scores_scatter.aggregate_script": "/path/to/git_repo/pipe/aggregate_scores.R",
     "calc_scores_scatter.RSCRIPT": "/path/to/r_install/R-4.4.1/bin/Rscript",
     "calc_scores_scatter.PLINK2": "/path/to/plink2_install/v2.00a.6LM.2023.1123/plink2",
-    "calc_scores_scatter.harmonize_scorefile": false,
+    "calc_scores_scatter.harmonize_scorefile": true,
     "calc_scores_scatter.ancestry_adjust": true,
     "calc_scores_scatter.add_chr_prefix": false,
     "calc_scores_scatter.subset_variants": null,
