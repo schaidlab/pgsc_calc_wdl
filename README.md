@@ -2,13 +2,13 @@
 ## Purpose: Calculate raw & ancestry-adjusted scores for PRIMED legacy project (PRSMix)
 
 WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm on a high performance computing (HPC) environment. This repo builds off of [Stephanie Gogarten's calc_scores.wdl pipeline](https://github.com/UW-GAC/pgsc_calc_wdl/blob/main/README.md) which calculates scores without using Nextflow. All
- scripts were authored by Stephanie Gogarten unless otherwise notes. 
+ scripts were authored by Stephanie Gogarten unless otherwise noted. 
 
 
 # General steps to run on Slurm HPC 
 
 1. Pre-requisite files
-   1. Harmonized score files (download from AnVil)
+   1. Harmonized score files (download from AnVIL)
    2. Pre-calculate ancestry-adjusted PCs, save in txt file
    3. Sample genotype files (VCF or PGEN)
 
@@ -18,8 +18,7 @@ WDL wrapper for calculating PGS and performing ancestry adjustment using Slurm o
 
 3. Edit the /config/slurm.example.config file specifying your local Slurm parameterization.
 
-4. Run **pgsc_calc_prepare_genomes** pipeline 
-	Standalone workflow to convert VCF to pgen/pvar/psam. 
+4. Run **pgsc_calc_prepare_genomes** pipeline; a standalone workflow to convert VCF to pgen/pvar/psam. 
 
 input | description
 --- | ---
@@ -33,8 +32,7 @@ pgen | Array of pgen files
 pvar | Array of pvar files
 psam | Array of psam files
 
-5. Run **calc_scores_scatter** pipeline
-	Calculate scores and perform ancestry adjustment without using Nextflow. Use pgsc_calc_prepare_genomes first to generate files.
+5. Run **calc_scores_scatter** pipeline to calculate scores and perform ancestry adjustment without using Nextflow. Use pgsc_calc_prepare_genomes first to generate files.
 
 input | description
 --- | ---
@@ -81,10 +79,11 @@ User will need to modify:
 
 ###  b. Submit pipeline 
 
-User will need to:
+The shell wrapper `prep_genomes.sh` enables required tools and runs the WDL pipeline pgsc_calc_prepare_genomes.WDL. To run the pipeline using this shell wrapper:   
+
 1. Update Slurm queue name in prep_genomes.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`. 
 	- To submit directly to Slurm queue:
-	sbatch --mail-user=<EMAIL.ADDRESS> --mail-type=FAIL prep_genomes.sh <<PIPELINE_DIR>> <<SLURM_CONFIG>> <<
+	sbatch --mail-user=<EMAIL.ADDRESS> --mail-type=FAIL prep_genomes.sh <<PIPELINE_DIR>> <<SLURM_CONFIG>> <<pgsc_calc_prepare_genomes JSON>> 
 2. Follow directions in submit_prep_genomes.sh to update repo location and config files
 3. Save both updated scripts (prep_genomes.sh and submit_prep_genomes.sh) 
 4. Run submit_prep_genomes.sh by submitting this line in a linux shell:
@@ -97,7 +96,7 @@ User will need to:
 
 User will need to modify:
 1. Data parameters:
-   - score file locations (harmonized files from Anvil)
+   - score file locations (harmonized files from AnVIL)
    - path to projection PCs for your samples 
    - pgen/psam/pvar file locations: 
 	   - The merged PGEN files will be located in the output from the pgsc_calc_prepare_genomes pipeline, i.e., /`root`/pgsc_calc_prepare_genomes/`random_string`/call-merge_files/execution/merged.[pvar/pgen/psam])
@@ -118,11 +117,14 @@ User will need to modify:
    
 ###  b. Submit pipeline (via submit_calc_scores.sh)
 
-User will need to:
-1. Update Slurm queue name in calc_scores.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`.  
-2. Follow directions in submit_calc_scores.sh to update repo location and config files
-3. Save both updated scripts (calc_scores.sh and submit_calc_scores.sh) 
-4. Run submit_calc_genomes.sh by submitting this line in a linux shell:
+The shell wrapper `calc_scores.sh` enables required tools and runs the WDL pipeline calc_scores_scatter.WDL. To run the pipeline using this shell wrapper:   
+
+1. Update Slurm queue name in calc_scores.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`.
+   	- To submit directly to Slurm queue:
+	sbatch --mail-user=<EMAIL.ADDRESS> --mail-type=FAIL calc_scores.sh <<PIPELINE_DIR>> <<SLURM_CONFIG>> <<calc_scores_scatter JSON>>
+3. Follow directions in submit_calc_scores.sh to update repo location and config files
+4. Save both updated scripts (calc_scores.sh and submit_calc_scores.sh) 
+5. Run submit_calc_genomes.sh by submitting this line in a linux shell:
    ./submit_calc_genomes.sh 
    
 
