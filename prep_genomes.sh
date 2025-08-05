@@ -3,7 +3,7 @@
 #SBATCH -J prep_genome
 #SBATCH -N 1
 #SBATCH -n 1
-#SBATCH -c 12
+#SBATCH -c 1
 #SBATCH --mem=16G
 #SBATCH -t 48:00:00
 
