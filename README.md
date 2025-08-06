@@ -129,6 +129,7 @@ The shell wrapper `calc_scores.sh` enables required tools and runs the WDL pipel
 	
 	*or*
 	
+<ol start="1">
 	
 1. Update Slurm queue name in calc_scores.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`.
 2. Follow directions in submit_calc_scores.sh to update repo location and config files
@@ -136,4 +137,4 @@ The shell wrapper `calc_scores.sh` enables required tools and runs the WDL pipel
 4. Run submit_calc_genomes.sh by submitting this line in a linux shell:
    ./submit_calc_genomes.sh 
    
-
+</ol>
