@@ -88,7 +88,7 @@ The shell wrapper `prep_genomes.sh` enables required tools and runs the WDL pipe
 	*or*
 	
 1. Update Slurm queue name in `prep_genomes.sh` to reflect a queue available on your system: `#SBATCH -p cpu-short`
-2. Follow directions in `submit_prep_genomes.sh` to update repo location and config files.
+2. Follow directions in `submit_prep_genomes.sh` to update repo and config file locations. 
 3. Save both updated scripts (`prep_genomes.sh` and `submit_prep_genomes.sh`).
 4. Run `submit_prep_genomes.sh` by submitting this line in a linux shell: `./submit_prep_genomes.sh`
   
@@ -129,7 +129,7 @@ The shell wrapper `calc_scores.sh` enables required tools and runs the WDL pipel
 	*or*
 	
 1. Update Slurm queue name in `calc_scores.sh` to reflect a queue available on your system: `#SBATCH -p cpu-short`
-2. Follow directions in `submit_calc_scores.sh` to update repo location and config files.
+2. Follow directions in `submit_calc_scores.sh` to update repo and config file locations.
 3. Save both updated scripts (`calc_scores.sh` and `submit_calc_scores.sh`).
 4. Run `submit_calc_genomes.sh` by submitting this line in a linux shell: `./submit_calc_genomes.sh`>
 
