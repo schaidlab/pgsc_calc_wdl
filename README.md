@@ -87,11 +87,14 @@ The shell wrapper `prep_genomes.sh` enables required tools and runs the WDL pipe
 	
 	*or*
 	
-1. Follow directions in submit_prep_genomes.sh to update repo location and config files
-2. Update Slurm queue name in prep_genomes.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`. 
-3. Save both updated scripts (prep_genomes.sh and submit_prep_genomes.sh) 
-4. Run submit_prep_genomes.sh by submitting this line in a linux shell:
-   ./submit_prep_genomes.sh 
+<ol start="1">
+
+	<li>Update Slurm queue name in <code>prep_genomes.sh</code> to reflect a queue available on your system: <code>#SBATCH -p cpu-short</code>.</li>
+	<li>Follow directions in <code>submit_prep_genomes.sh</code> to update repo location and config files.</li>
+	<li>Save both updated scripts (<code>prep_genomes.sh</code> and <code>submit_prep_genomes.sh</code>).</li>
+	<li>Run <code>submit_prep_genomes.sh</code> by submitting this line in a linux shell: <code>./submit_prep_genomes.sh</code></li>
+
+</ol>
    
 
 ## 5. Run calc_score_scatter WDL pipeline
@@ -130,11 +133,10 @@ The shell wrapper `calc_scores.sh` enables required tools and runs the WDL pipel
 	*or*
 	
 <ol start="1">
-	
-1. Update Slurm queue name in calc_scores.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`.
-2. Follow directions in submit_calc_scores.sh to update repo location and config files
-3. Save both updated scripts (calc_scores.sh and submit_calc_scores.sh) 
-4. Run submit_calc_genomes.sh by submitting this line in a linux shell:
-   ./submit_calc_genomes.sh 
-   
+
+	<li>Update Slurm queue name in <code>calc_scores.sh</code> to reflect a queue available on your system: <code>#SBATCH -p cpu-short</code>.</li>
+	<li>Follow directions in <code>submit_calc_scores.sh</code> to update repo location and config files.</li>
+	<li>Save both updated scripts (<code>calc_scores.sh</code> and <code>submit_calc_scores.sh</code>).</li>
+	<li>Run <code>submit_calc_genomes.sh</code> by submitting this line in a linux shell: <code>./submit_calc_genomes.sh</code></li>
+
 </ol>
