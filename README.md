@@ -129,6 +129,7 @@ The shell wrapper `calc_scores.sh` enables required tools and runs the WDL pipel
 	
 	*or*
 	
+	
 1. Update Slurm queue name in calc_scores.sh to reflect a queue available on your system:  `#SBATCH -p cpu-short`.
 2. Follow directions in submit_calc_scores.sh to update repo location and config files
 3. Save both updated scripts (calc_scores.sh and submit_calc_scores.sh) 
