@@ -15,9 +15,11 @@ overlap.files <- strsplit(opt$overlap_files, ",")[[1]]
 
 # Read and bind all raw files
 raw.data <- lapply(raw.files, read.table, comment.char = "", header = TRUE)
-idcol <- raw.data[[1]][1]
-all.raw.avg <- do.call('cbind', list(idcol, lapply(raw.data, function(df) { dplyr::select(df[, -1], contains('AVG')) })))
-all.raw.sum <- do.call('cbind', list(idcol, lapply(raw.data, function(df) { dplyr::select(df[, -1], contains('SUM')) })))
+idcol <- raw.data[[1]][1]  # subject id
+all.raw.avg <- do.call('cbind', list(idcol, lapply(raw.data, function(df) { dplyr::select(df[, -c(1:3)], contains('AVG')) })))
+all.raw.sum <- do.call('cbind', list(idcol, lapply(raw.data, function(df) { dplyr::select(df[, -c(1:3)], contains('SUM')) })))
+## the all.raw.sum data.frame includes duplicate 'NAMED_ALLELE_DOSAGE_SUM' columns.
+## - Remove all but first occurence
 write.table(all.raw.avg, paste0(opt$out_prefix, "_raw_avg_scores.tsv"),
             append = FALSE, quote = FALSE, sep = "\t", row.names = FALSE)
 write.table(all.raw.sum, paste0(opt$out_prefix, "_raw_sum_scores.tsv"),
