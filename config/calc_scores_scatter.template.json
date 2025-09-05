@@ -1,15 +1,15 @@
 {
     "calc_scores_scatter.scorefile": [
         "/path/to/downloaded/scorefiles/pgscat_weight_00_allchr_additive_0.scorefile.gz",
-        "/path/to/downloaded/scorefiles/pgscat_weight_01_allchr_additive_0.scorefile.gz"
-        "/path/to/downloaded/scorefiles/pgscat_weight_02_allchr_additive_0.scorefile.gz"
-        "/path/to/downloaded/scorefiles/pgscat_weight_03_allchr_additive_0.scorefile.gz"
-        "/path/to/downloaded/scorefiles/pgscat_weight_04_allchr_additive_0.scorefile.gz"
-        "/path/to/downloaded/scorefiles/pgscat_weight_05_allchr_additive_0.scorefile.gz"
-        "/path/to/downloaded/scorefiles/pgscat_weight_06_allchr_additive_0.scorefile.gz"
-        "/path/to/downloaded/scorefiles/pgscat_weight_07_allchr_additive_0.scorefile.gz"
-        "/path/to/downloaded/scorefiles/pgscat_weight_08_allchr_additive_0.scorefile.gz"
-        "/path/to/downloaded/scorefiles/pgscat_weight_09_allchr_additive_0.scorefile.gz"
+        "/path/to/downloaded/scorefiles/pgscat_weight_01_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_02_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_03_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_04_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_05_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_06_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_07_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_08_allchr_additive_0.scorefile.gz",
+        "/path/to/downloaded/scorefiles/pgscat_weight_09_allchr_additive_0.scorefile.gz",
         "/path/to/downloaded/scorefiles/pgscat_weight_10_allchr_additive_0.scorefile.gz"	    
     ],
     "calc_scores_scatter.pgen": "/root/pgsc_calc_prepare_genomes/668d4478-5152-44db-a59e-2bab513b38de/call-merge_files/execution/merged.pgen",
