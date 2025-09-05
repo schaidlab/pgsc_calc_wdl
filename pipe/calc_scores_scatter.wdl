@@ -307,7 +307,7 @@ task aggregate_results {
      }
 
     command <<<
-        ~{RSCRIPT} ~{aggregate_script} \
+        Rscript ~{aggregate_script} \
             --raw_files "~{sep=',' raw_scores}" \
             --adjusted_files "~{sep=',' adjusted_scores}" \
             --overlap_files "~{sep=',' overlap_files}" \
