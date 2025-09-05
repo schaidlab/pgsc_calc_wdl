@@ -3,7 +3,8 @@ library(stringr)
 
 prep_scores <- function(scores) {
     scores2 <- scores %>%
-        select(IID=`#IID`, ends_with("_SUM")) %>%
+        select(IID = any_of(c("#IID", "IID")), ends_with("_SUM")) %>%
+        #select(IID=`#IID`, ends_with("_SUM")) %>%
         select(IID, starts_with("PGS")) %>%
         mutate(IID = as.character(IID))
     names(scores2) <- str_replace(names(scores2), "_SUM", "")
